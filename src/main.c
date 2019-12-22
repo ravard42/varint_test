@@ -10,6 +10,7 @@ static void			type_usage( void )
 			
 }
 
+
 //static void			opts_usage( void )
 //{
 //	static char		*opts[] = {"end0",
