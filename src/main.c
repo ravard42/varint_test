@@ -57,10 +57,10 @@ int	main(int argc, char **argv)
 			return (0);
 		return (verif_op(fd, argv));
 	}
-//	t_varint n;
+	t_varint n;
 	if (!ft_strcmp("find_prime", argv[1]) && argc == 3) {
-//		n = find_prime(fd, atoi(argv[2]), true);
-		//v_print(&n, "prime", -2, KYEL);
+		n = find_prime(fd, atoi(argv[2]), true);
+//		v_print(&n, "prime", -2, KYEL);
 	}
 	close(fd);
 	return (0);
