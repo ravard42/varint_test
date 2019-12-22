@@ -52,7 +52,7 @@ static bool	verify(char *op, t_u64 *u64, t_varint *v)
 **	 	4			2nd res (for eea)
 */
 
-static void		init_u64_v(t_u64 *u64, t_varint *v, int fd, char **argv)
+static void		rand_init_u64_v(t_u64 *u64, t_varint *v, int fd, char **argv)
 {
 	uint8_t		buff;
 	int			gcc_err;
@@ -84,13 +84,105 @@ static void		init_u64_v(t_u64 *u64, t_varint *v, int fd, char **argv)
 	}
 }
 
+
+//V_TYPE = uint64_t, len = 16 (2 * 8)
+static void	manual_init_v(t_varint *v, t_varint *p, t_varint *q)
+{
+	v[0].sign = 1;
+	v[0].len = 16;
+	v[0].x[0] = 0x6b6963152ba23031; 
+	v[0].x[1] = 0xa0031b979d421017; 
+	v[0].x[2] = 0xb9651bb108c12cc3; 
+	v[0].x[3] = 0x2b4852eb5801ff86; 
+	v[0].x[4] = 0x5e3d012b1a03443e; 
+	v[0].x[5] = 0xe3909077ee0dd2ea; 
+	v[0].x[6] = 0xc9622a10ae2d9048; 
+	v[0].x[7] = 0xaf40a27a343dc068; 
+	v[0].x[8] = 0x1f4d9adcf122049b; 
+	v[0].x[9] = 0x14baa7522f07ebfe; 
+	v[0].x[10] = 0x8a46d247de3bb6e5; 
+	v[0].x[11] = 0x61aa60009b8ad92d; 
+	v[0].x[12] = 0xe861470de3f1cd67; 
+	v[0].x[13] = 0xdd2e2c003a6a7e03; 
+	v[0].x[14] = 0x88b36375779211d0; 
+	v[0].x[15] = 0x33cb19db201101d; 
+
+
+	v[1].sign = 1;
+	v[1].len = 16;
+	v[1].x[0] = 0x1f4d9adcf122049b; 
+	v[1].x[1] = 0x14baa7522f07ebfe; 
+	v[1].x[2] = 0x8a46d247de3bb6e5; 
+	v[1].x[3] = 0x61aa60009b8ad92d; 
+	v[1].x[4] = 0xe861470de3f1cd67; 
+	v[1].x[5] = 0xdd2e2c003a6a7e03; 
+	v[1].x[6] = 0x88b36375779211d0; 
+	v[1].x[7] = 0x33cb19db201101d; 
+	v[1].x[8] = 0x6b6963152ba23031; 
+	v[1].x[9] = 0xa0031b979d421017; 
+	v[1].x[10] = 0xb9651bb108c12cc3; 
+	v[1].x[11] = 0x2b4852eb5801ff86; 
+	v[1].x[12] = 0x5e3d012b1a03443e; 
+	v[1].x[13] = 0xe3909077ee0dd2ea; 
+	v[1].x[14] = 0xc9622a10ae2d9048; 
+	v[1].x[15] = 0xaf40a27a343dc068; 
+
+
+
+	p->sign = 1;
+	p->len = 8;
+	p->x[0] = 0x6b6963152ba23031; 
+	p->x[1] = 0xa0031b979d421017; 
+	p->x[2] = 0xb9651bb108c12cc3; 
+	p->x[3] = 0x2b4852eb5801ff86; 
+	p->x[4] = 0x5e3d012b1a03443e; 
+	p->x[5] = 0xe3909077ee0dd2ea; 
+	p->x[6] = 0xc9622a10ae2d9048; 
+	p->x[7] = 0xaf40a27a343dc068; 
+	q->sign = 1;
+	q->len = 8;
+	q->x[0] = 0x1f4d9adcf122049b; 
+	q->x[1] = 0x14baa7522f07ebfe; 
+	q->x[2] = 0x8a46d247de3bb6e5; 
+	q->x[3] = 0x61aa60009b8ad92d; 
+	q->x[4] = 0xe861470de3f1cd67; 
+	q->x[5] = 0xdd2e2c003a6a7e03; 
+	q->x[6] = 0x88b36375779211d0; 
+	q->x[7] = 0x33cb19db201101d; 
+
+//	v[2] = v_mul(*p, *q);
+//	v_print(v + 2, "v[2]", -2, KYEL);
+	
+	v[2].sign = 1;
+	v[2].len = 16;
+	v[2].x[0] = 0x435ab1847b75f1ab; 
+	v[2].x[1] = 0x6b1840a6fdcd07cf; 
+	v[2].x[2] = 0x2f65d7eb9cb12ba3; 
+	v[2].x[3] = 0x66fd8f2886137290; 
+	v[2].x[4] = 0x1a6790101d6307e2; 
+	v[2].x[5] = 0x78e6761bf07b1fef; 
+	v[2].x[6] = 0xdb288cb3f749f50e; 
+	v[2].x[7] = 0x74529b3855d2ed7c; 
+	v[2].x[8] = 0xfe214d8ae715c5de; 
+	v[2].x[9] = 0x40bb3428b0dea941; 
+	v[2].x[10] = 0x3db764f82e57d8d1; 
+	v[2].x[11] = 0x360da6b046566e47; 
+	v[2].x[12] = 0x513e3af1b619ef33; 
+	v[2].x[13] = 0x68f58910d2c278e9; 
+	v[2].x[14] = 0xebaf20bbc21ef726; 
+	v[2].x[15] = 0x2374ea52816c60c;
+
+	v[3] = v[4] = g_v[0];
+}
+
+
 int			speed_op(int fd, char **argv)
 {
 	t_varint	 	v[5];
 	t_varint		p, q;
 
-	init_u64_v(NULL, v, fd, argv);	
-	
+	manual_init_v(v, &p, &q);
+//	rand_init_u64_v(NULL, v, fd, argv);	
 
 	if (!ft_strcmp("cmp_lt", argv[2]))
 		v_cmp(v[0], "-lt", v[1]);
@@ -116,16 +208,27 @@ int			speed_op(int fd, char **argv)
 	}
 	else if (!ft_strcmp("expmod", argv[2]))
 	{
-		v[1].sign = 1;
-		v[2] = is_g_v(0, v[2]) ? g_v[1] : v[2];
-		v[3] = v_expmod(v[0], v[1], v[2], true);
+		//manual
+		v[3] = v_expmod(v[0], v[1], v_mul(p, q), true);
+		v_print(v + 3, "v[3]", -2, KYEL);
+
+
+//		random
+//		v[1].sign = 1;
+//		v[2] = is_g_v(0, v[2]) ? g_v[1] : v[2];
+//		v[3] = v_expmod(v[0], v[1], v[2], true);
 	}
 	else if (!ft_strcmp("crt", argv[2]))
 	{
-		p = find_prime(fd, 2, false);
-		q = find_prime(fd, 2, false);
-		v[1].sign = 1;
+		//manual
 		v[3] = v_crt(v[0], v[1], p, q);	
+		v_print(v + 3, "v[3]", -2, KYEL);
+		
+//		random
+//		p = find_prime(fd, atoi(argv[3]) / 2, false);
+//		q = find_prime(fd, atoi(argv[3]) / 2, false);
+//		v[1].sign = 1;
+//		v[3] = v_crt(v[0], v[1], p, q);	
 	}
 	else if (!ft_strcmp("gcd", argv[2]))
 		v[3] = v_gcd(v[0], v[1]);
@@ -151,7 +254,7 @@ int			verif_op(int fd, char **argv)
 	t_varint	 	v[5];
 	t_varint		p, q;
 
-	init_u64_v(u64, v, fd, argv);	
+	rand_init_u64_v(u64, v, fd, argv);	
 	//show_var(0, 2, u64, v);	
 
 	/*
@@ -231,10 +334,24 @@ int			verif_op(int fd, char **argv)
 	}
 	else if (!ft_strcmp("expmod", argv[2]))
 	{
+	//	u64[3] = u64_expmod(u64[0], u64[1], u64[2], true);
+
+		p = find_prime(fd, 2, false);
+		q = find_prime(fd, 2, false);
+	
+		u64[1].sign = 1;
+		u64[2].sign = 1;
+		u64[2].x = (((uint64_t)p.x[1] << 8) + (uint64_t)p.x[0])
+			* (((uint64_t)q.x[1] << 8) + (uint64_t)q.x[0]);
 		u64[3] = u64_expmod(u64[0], u64[1], u64[2], true);
+
+	//	v[1].sign = 1;
+	//	v[2] = is_g_v(0, v[2]) ? g_v[1] : v[2];
+	//	v[3] = v_expmod(v[0], v[1], v[2], true);
+
 		v[1].sign = 1;
-		v[2] = is_g_v(0, v[2]) ? g_v[1] : v[2];
-		v[3] = v_expmod(v[0], v[1], v[2], true);
+		v[3] = v_expmod(v[0], v[1], v_mul(p, q), true);
+
 	}
 	else if (!ft_strcmp("crt", argv[2]))
 	{
@@ -247,48 +364,9 @@ int			verif_op(int fd, char **argv)
 			* (((uint64_t)q.x[1] << 8) + (uint64_t)q.x[0]);
 		u64[3] = u64_expmod(u64[0], u64[1], u64[2], true);
 
-//		u64[1].sign = 1;
-//		u64[2].sign = 1;
-//		u64[2].x = (101 + 0 * 256) * (187 + 19 * 256);
-//		u64[0].x = 2804391156;
-//		u64[0].sign = -1;
-//		u64[1].x = 1631970995;
-//		u64[3] = u64_expmod(u64[0], u64[1], u64[2], true);
-//		v[0].sign = -1;
-//		v[0].x[3] = 167;
-//		v[0].x[2] = 39;
-//		v[0].x[1] = 156;
-//		v[0].x[0] = 244;
-//		v[1].sign = 1;
-//		v[1].x[3] = 97;
-//		v[1].x[2] = 69;
-//		v[1].x[1] = 230;
-//		v[1].x[0] = 179;
-//		p.sign = q.sign = 1;
-//		p.len = 1;
-//		q.len = 2;
-//		p.x[1] = 0;
-//		p.x[0] = 101;
-//		q.x[1] = 19;
-//		q.x[0] = 187;
-//		v[2] = v_mul(p, q);
 	
 		v[1].sign = 1;
-
 		v[2] = v_mul(p, q);
-
-//		dp = v_mod(v[1], v_dec(p), true);
-//		dq = v_mod(v[1], v_dec(q), true);
-//		cp = v_mod(v[0], p, true);
-//		cq = v_mod(v[0], q, true);
-//
-//		qinv = v_inv(q, p);
-//
-//		m1 = v_expmod(cp, dp, p, true);
-//		m2 = v_expmod(cq, dq, q, true);
-//		h = v_mod(v_mul(qinv, v_sub(m1, m2)), p, true);
-//		v[3] = v_mod(v_add(m2, v_mul(h, q)), v[2], true);
-	
 		v[3] = v_crt(v[0], v[1], p, q);	
 	}
 	else if (!ft_strcmp("gcd", argv[2]))

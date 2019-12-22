@@ -3,7 +3,7 @@
 
 static void			type_usage( void )
 {
-	static char		*type[] = {"verif_op", "speed_op", "find_primes"};
+	static char		*type[] = {"verif_op", "speed_op", "find_prime"};
 
 	for (int i = 0; i < 3; i++)
 		ft_printf("\n%s%s%s:\n", KBLU, type[i], KNRM);
@@ -56,8 +56,11 @@ int	main(int argc, char **argv)
 			return (0);
 		return (verif_op(fd, argv));
 	}
-	if (!ft_strcmp("find_prime", argv[1]) && argc == 3)
-		find_prime(fd, atoi(argv[2]), true);
+//	t_varint n;
+	if (!ft_strcmp("find_prime", argv[1]) && argc == 3) {
+//		n = find_prime(fd, atoi(argv[2]), true);
+		//v_print(&n, "prime", -2, KYEL);
+	}
 	close(fd);
 	return (0);
 }
