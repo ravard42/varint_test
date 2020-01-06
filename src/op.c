@@ -245,6 +245,7 @@ int			speed_op(int fd, char **argv)
 	t_varint	 	v[5];
 	t_varint		p, q;
 
+	(void)fd;
 	manual_init_1024_x2_prime(v, &p, &q);
 //	rand_init_u64_v(NULL, v, fd, argv);	
 

@@ -14,7 +14,8 @@
 int			speed_op(int fd, char **argv);
 int			verif_op(int fd, char **argv);
 t_varint		find_prime(int fd, V_LEN_TYPE len, bool print_prime);
-
+int			basic_asn1_der_test(char *f_der);
+int			rsa_asn1_der_test(char *in_der, char *out_der);
 
 
 
