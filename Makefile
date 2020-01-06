@@ -1,7 +1,7 @@
 CC = gcc
 NAME = varint_test
 
-FLAGS = -Wall -Wextra -Werror -Ofast
+FLAGS = -Wall -Wextra -Ofast
 #FLAGS = -Wall -Wextra -ggdb -fsanitize=address
 
 SRC = src/main.c\

@@ -59,7 +59,8 @@ int	main(int argc, char **argv)
 	}
 	if (!ft_strcmp("find_prime", argv[1]) && argc == 3) {
 		t_varint n = find_prime(fd, atoi(argv[2]), true);
-		v_print(&n, "prime", -2, KYEL);
+		(void)n;
+	//	v_print(&n, "prime", -2, KYEL);
 	}
 	if (!ft_strcmp("asn1_der", argv[1])) {
 		if (!ft_strcmp("basic", argv[2]) && argc == 4)

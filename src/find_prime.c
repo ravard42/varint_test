@@ -1,22 +1,8 @@
 #include "varint_test.h"
 
-
 /*
 ** Probabilistic Primality Test
 */
-
-t_varint		v_rand_n(int fd, V_LEN_TYPE len)
-{
-	V_TYPE		rand_n[len];
-	V_LEN_TYPE		i;
-	t_varint		n;
-
-	i = -1;
-	while (++i < len)
-		rand_n[i] = ft_rand(fd, 0, 0);
-	n = v_init(1, rand_n, len);
-	return (n);
-}
 
 static t_varint		v_rand_a(int fd, t_varint n)
 {
