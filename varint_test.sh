@@ -22,10 +22,10 @@ if [[ $1 == "speed_op" || $1 == "verif_op" ]] && (($# == 4));then
 
 if [[ $1 == "speed_op" ]];then
 COL=$KYEL
-echo -e "${KBLU}SPEED_OP TEST START\n"
+echo -e "${KBLU}SPEED_OP TEST START${KNRM}\n"
 else
 COL=$KGRN
-echo -e "${KBLU}VERIF_OP TEST START\n"
+echo -e "${KBLU}VERIF_OP TEST START${KNRM}\n"
 fi
 
 OK=0
@@ -58,7 +58,7 @@ if [[ $1 == find_prime ]] && (($# == 3));then
 
 i=-1
 
-echo -e "${KBLU}FIND_PRIME TEST START\n"
+echo -e "${KBLU}FIND_PRIME TEST START${KNRM}\n"
 
 while ((++i < $3));do
 

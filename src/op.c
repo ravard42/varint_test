@@ -52,10 +52,9 @@ static bool	verify(char *op, t_u64 *u64, t_varint *v)
 **	 	4			2nd res (for eea)
 */
 
-static void		rand_init_u64_v(t_u64 *u64, t_varint *v, int fd, char **argv)
+static void		rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv)
 {
 	uint8_t		buff;
-	int			gcc_err;
 
 	for(int i = 0; i < 5; i++)
 	{
@@ -66,16 +65,14 @@ static void		rand_init_u64_v(t_u64 *u64, t_varint *v, int fd, char **argv)
 
 	for (int i = 0; i < 3; i++)
 	{
-		gcc_err = read(fd, &buff, 1);
-		(void)gcc_err;		
+		ft_rand(&buff, 1);
 
 		v[i].sign = (buff % 2) ? 1 : -1;
 		if (u64)
 			u64[i].sign = v[i].sign;
 		for (int j = 0; j < atoi(argv[3]); j++)
 		{
-			gcc_err = read(fd, &buff, 1);
-			(void)gcc_err;		
+			ft_rand(&buff, 1);
 			v[i].x[j] = buff;
 			if (u64)
 				u64[i].x += (uint64_t)buff << 8 * j;
@@ -85,7 +82,7 @@ static void		rand_init_u64_v(t_u64 *u64, t_varint *v, int fd, char **argv)
 }
 
 
-//V_TYPE = uint64_t, len = 16 (2 * 8)
+//V_TYPE = uint64_t, len = 32 (2 * 16)
 static void	manual_init_1024_x2_prime(t_varint *v, t_varint *p, t_varint *q)
 {
 	v[0].sign = 1;
@@ -240,14 +237,13 @@ static void	manual_init_1024_x2_prime(t_varint *v, t_varint *p, t_varint *q)
 }
 
 
-int			speed_op(int fd, char **argv)
+int			speed_op(char **argv)
 {
 	t_varint	 	v[5];
 	t_varint		p, q;
 
-	(void)fd;
 	manual_init_1024_x2_prime(v, &p, &q);
-//	rand_init_u64_v(NULL, v, fd, argv);	
+//	rand_init_u64_v(NULL, v, argv);	
 
 	if (!ft_strcmp("cmp_lt", argv[2]))
 		v_cmp(v[0], "-lt", v[1]);
@@ -290,8 +286,8 @@ int			speed_op(int fd, char **argv)
 		v_print(v + 3, "v[3]", -2, KYEL);
 		
 //		random
-//		p = find_prime(fd, atoi(argv[3]) / 2, false);
-//		q = find_prime(fd, atoi(argv[3]) / 2, false);
+//		p = find_prime(atoi(argv[3]) / 2, false);
+//		q = find_prime(atoi(argv[3]) / 2, false);
 //		v[1].sign = 1;
 //		v[3] = v_crt(v[0], v[1], p, q);	
 	}
@@ -312,14 +308,14 @@ int			speed_op(int fd, char **argv)
 	return (42);
 }
 
-int			verif_op(int fd, char **argv)
+int			verif_op(char **argv)
 {
 
 	t_u64			u64[5]; 
 	t_varint	 	v[5];
 	t_varint		p, q;
 
-	rand_init_u64_v(u64, v, fd, argv);	
+	rand_init_u64_v(u64, v, argv);	
 	//show_var(0, 2, u64, v);	
 
 	/*
@@ -401,8 +397,8 @@ int			verif_op(int fd, char **argv)
 	{
 	//	u64[3] = u64_expmod(u64[0], u64[1], u64[2], true);
 
-		p = find_prime(fd, 2, false);
-		q = find_prime(fd, 2, false);
+		p = find_prime(2, false);
+		q = find_prime(2, false);
 	
 		u64[1].sign = 1;
 		u64[2].sign = 1;
@@ -420,8 +416,8 @@ int			verif_op(int fd, char **argv)
 	}
 	else if (!ft_strcmp("crt", argv[2]))
 	{
-		p = find_prime(fd, 2, false);
-		q = find_prime(fd, 2, false);
+		p = find_prime(2, false);
+		q = find_prime(2, false);
 		
 		u64[1].sign = 1;
 		u64[2].sign = 1;

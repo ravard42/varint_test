@@ -42,32 +42,24 @@ int			usage(void)
 
 int	main(int argc, char **argv)
 {
-	int			fd;
-
 	if (argc == 1)
 		return (usage());
-	if ((fd = open("/dev/urandom", O_RDONLY)) == -1)
-		return (-1);
 	if (!ft_strcmp("speed_op", argv[1]) && argc == 4)
-		return (speed_op(fd, argv));
+		return (speed_op(argv));
 	if (!ft_strcmp("verif_op", argv[1]) && argc == 4)
 	{
 		if (sizeof(V_TYPE) != 1
 			&& ft_dprintf(2, VERIF_U8_ERR, KRED, KNRM))
 			return (-1);
-		return (verif_op(fd, argv));
+		return (verif_op(argv));
 	}
-	if (!ft_strcmp("find_prime", argv[1]) && argc == 3) {
-		t_varint n = find_prime(fd, atoi(argv[2]), true);
-		(void)n;
-	//	v_print(&n, "prime", -2, KYEL);
-	}
+	if (!ft_strcmp("find_prime", argv[1]) && argc == 3)
+		find_prime(atoi(argv[2]), true);
 	if (!ft_strcmp("asn1_der", argv[1])) {
 		if (!ft_strcmp("basic", argv[2]) && argc == 4)
 			return(basic_asn1_der_test(argv[3]));
 		if (!ft_strcmp("rsa", argv[2]) && argc == 5)
 			return (rsa_asn1_der_test(argv[3], argv[4]));
 	}
-	close(fd);
 	return (0);
 }

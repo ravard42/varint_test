@@ -26,7 +26,7 @@ static int		basic_asn1_der_d(char *in_der)
 	int		nb_v;
 	int		id;
 
-	if (ft_read(in_der, &r) < 0 
+	if (ft_read(&r, in_der) < 0 
 			&& ft_dprintf(2, "%sft_read error in asn1_der decoding\n%s", KRED, KNRM))
 		return (-1);
 	if ((v = v_asn1_der_int_seq_d(&nb_v, &r)))
@@ -60,7 +60,7 @@ int		rsa_asn1_der_test(char *in_der, char *out_der)
 	int			nb_v;
 	int			fd_out;
 
-	if (ft_read(in_der, &r) < 0 
+	if (ft_read(&r, in_der) < 0 
 			&& ft_dprintf(2, "%sft_read error: rsa_asn1_der_verif\n%s", KRED, KNRM))
 		return (-1);
 	if ((v = v_asn1_der_int_seq_d(&nb_v, &r)))
