@@ -40,8 +40,19 @@ int			usage(void)
 	return (-1);
 }
 
+# define TOTO 2
+
+typedef struct  s_test
+{
+	int			i[TOTO];
+}				t_test;
+
 int	main(int argc, char **argv)
 {
+
+	t_varint	v;
+	t_test		t;
+
 	if (argc == 1)
 		return (usage());
 	if (!ft_strcmp("speed_op", argv[1]) && argc == 4)

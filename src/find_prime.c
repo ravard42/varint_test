@@ -93,11 +93,11 @@ t_varint		find_prime(V_LEN_TYPE len, bool print_prime)
 {
 	t_varint n;
 
-	n = v_rand_n(len);
+	n = v_rand(len, false);
 	n.x[0] += (n.x[0] % 2 == 0) ? 1 : 0;	
 	while (!prob_prim_test(n))
 	{
-		n = v_rand_n(len);
+		n = v_rand(len, false);
 		n.x[0] += (n.x[0] % 2 == 0) ? 1 : 0;	
 	}
 	if (print_prime)

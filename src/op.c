@@ -47,14 +47,25 @@ static bool	verify(char *op, t_u64 *u64, t_varint *v)
 **				
 **		0			1st operand
 **		1			2nd operand
-**	 	2			3rd operand (for modulo)
+**	 	2			3rd operand (for modulus only)
 **	 	3			1st res
 **	 	4			2nd res (for eea)
 */
 
+/*
+**	u64 != NULL only for verif_op with V_TYPE == uint8_t
+**
+**	NB: in this case we have always atoi(argv[3]) <= 8 (can't be verified if not)
+**		more particularly with operator overflow:
+**		<= 8 for cmp_lt, cmp_eq, div, mod, gcd and eea
+**		<= 7 for add and sub
+**		<= 4 for mul, expmod and crt
+**		== 1 for exp with %16 hardcoded see line 379
+*/
+
 static void		rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv)
 {
-	uint8_t		buff;
+	uint8_t		sign;
 
 	for(int i = 0; i < 5; i++)
 	{
@@ -65,19 +76,13 @@ static void		rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv)
 
 	for (int i = 0; i < 3; i++)
 	{
-		ft_rand(&buff, 1);
-
-		v[i].sign = (buff % 2) ? 1 : -1;
+		v[i] = v_rand(atoi(argv[3]), true);
 		if (u64)
-			u64[i].sign = v[i].sign;
-		for (int j = 0; j < atoi(argv[3]); j++)
 		{
-			ft_rand(&buff, 1);
-			v[i].x[j] = buff;
-			if (u64)
-				u64[i].x += (uint64_t)buff << 8 * j;
+			u64[i].sign = v[i].sign;
+			for (int j = 0; j < atoi(argv[3]); j++)
+				u64[i].x += (uint64_t)v[i].x[j] << 8 * j;
 		}
-		v_len(v + i);
 	}
 }
 
@@ -85,6 +90,8 @@ static void		rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv)
 //V_TYPE = uint64_t, len = 32 (2 * 16)
 static void	manual_init_1024_x2_prime(t_varint *v, t_varint *p, t_varint *q)
 {
+	//for crt verif speed
+
 	v[0].sign = 1;
 	v[0].len = 32;
 	v[0].x[0] = 0x6b6963152ba23031; 
@@ -242,8 +249,8 @@ int			speed_op(char **argv)
 	t_varint	 	v[5];
 	t_varint		p, q;
 
-	manual_init_1024_x2_prime(v, &p, &q);
-//	rand_init_u64_v(NULL, v, argv);	
+//	manual_init_1024_x2_prime(v, &p, &q);
+	rand_init_u64_v(NULL, v, argv);	
 
 	if (!ft_strcmp("cmp_lt", argv[2]))
 		v_cmp(v[0], "-lt", v[1]);
