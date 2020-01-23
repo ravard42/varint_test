@@ -5,7 +5,9 @@ NAME = varint_test
 FLAGS = -Wall -Wextra -ggdb -fsanitize=address
 
 SRC = src/main.c\
-		src/op.c\
+		src/op_tools.c\
+		src/verif_op.c\
+		src/speed_op.c\
 		src/u64.c\
 		src/find_prime.c\
 		src/asn1_der.c\
