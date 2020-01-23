@@ -37,6 +37,8 @@ while ((++i < $4));do
 
 if (($? == 42)); then
 ((OK += 1))
+else
+COL=$KRED
 fi
 
 

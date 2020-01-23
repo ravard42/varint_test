@@ -1,5 +1,24 @@
 #include "varint_test.h"
 
+/*
+** about u64[5] and v[5]
+**
+**	index 		data
+**				
+**		0			1st operand
+**		1			2nd operand
+**	 	2			3rd operand (for modulus only)
+**	 	3			1st res
+**	 	4			2nd res (for eea)
+*/
+
+/* show_var doc:
+**
+** 2nd param: 	0 -> only print  3 operand var 
+**				1 -> print operand var and first result
+**				2 -> print all var
+*/
+
 static void		show_var(int state, int res, t_u64 *u, t_varint *v)
 {
 	if (state == 42)
@@ -21,37 +40,6 @@ static void		show_var(int state, int res, t_u64 *u, t_varint *v)
 	}
 }
 
-static bool	verify(char *op, t_u64 *u64, t_varint *v)
-{
-	uint64_t		verif[2] = {0};
-	bool			ret;
-
-	for (int i = 0; i < (v + 3)->len; i++)
-		verif[0] += (uint64_t)(v + 3)->x[i] << (8 * i);
-	ret = ((u64 + 3)->sign == (v + 3)->sign
-			&& (u64 + 3)->x == verif[0]) ? true : false;
-	if (!ft_strcmp(op, "eea"))
-	{
-		for (int i = 0; i < (v + 4)->len; i++)
-			verif[1] += (uint64_t)(v + 4)->x[i] << (8 * i);
-		ret = ((u64 + 4)->sign == (v + 4)->sign
-			&& (u64 + 4)->x == verif[1]) ? true : false;
-	}
-	return (ret);
-}
-
-/*
-** about u64[5] and v[5]
-**
-**	index 		data
-**				
-**		0			1st operand
-**		1			2nd operand
-**	 	2			3rd operand (for modulus only)
-**	 	3			1st res
-**	 	4			2nd res (for eea)
-*/
-
 /*
 **	u64 != NULL only for verif_op with V_TYPE == uint8_t
 **
@@ -63,7 +51,7 @@ static bool	verify(char *op, t_u64 *u64, t_varint *v)
 **		== 1 for exp with %16 hardcoded see line 379
 */
 
-static void		rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv)
+static bool		rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv)
 {
 	uint8_t		sign;
 
@@ -76,7 +64,8 @@ static void		rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv)
 
 	for (int i = 0; i < 3; i++)
 	{
-		v[i] = v_rand(atoi(argv[3]), true);
+		if (is_g_v(3, v[i] = v_rand(atoi(argv[3]), true)))
+			return (false);
 		if (u64)
 		{
 			u64[i].sign = v[i].sign;
@@ -84,6 +73,7 @@ static void		rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv)
 				u64[i].x += (uint64_t)v[i].x[j] << 8 * j;
 		}
 	}
+	return true;
 }
 
 
@@ -254,10 +244,12 @@ int			speed_op(char **argv)
 	t_varint	 	v[5];
 	t_varint		p, q;
 
+	ft_dprintf(2, "%sIN : SPEED_OP\n%s", KWHT, KNRM);
 //	manual_init_1024_x2_prime(v, &p, &q);
-	rand_init_u64_v(NULL, v, argv);	
+	if (!rand_init_u64_v(NULL, v, argv)
+		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
+		return (-42);	
 
-	ft_printf("COUCOU\n");
 	if (!ft_strcmp("cmp_lt", argv[2]))
 		v_cmp(v[0], "-lt", v[1]);
 	if (!ft_strcmp("cmp_eq", argv[2]))
@@ -316,10 +308,28 @@ int			speed_op(char **argv)
 		ft_dprintf(2, "%s'%s' : unknown operator%s\n", KRED, argv[2], KNRM);
 		return (-42);
 	}
-	ft_printf("YOP\n");
-	if (is_g_v(3, v[3]) || is_g_v(3, v[4]))
-		return (-42);	
-	return (42);
+	ft_dprintf(2, "%sOUT SPEED_OP\n%s", KWHT, KNRM);
+	int ret = (is_g_v(3, v[3]) || is_g_v(3, v[4])) ? -42 : 42;
+	return (ret);
+}
+
+static bool	verify(char *op, t_u64 *u64, t_varint *v)
+{
+	uint64_t		verif[2] = {0};
+	bool			ret;
+
+	for (int i = 0; i < (v + 3)->len; i++)
+		verif[0] += (uint64_t)(v + 3)->x[i] << (8 * i);
+	ret = ((u64 + 3)->sign == (v + 3)->sign
+			&& (u64 + 3)->x == verif[0]) ? true : false;
+	if (!ft_strcmp(op, "eea"))
+	{
+		for (int i = 0; i < (v + 4)->len; i++)
+			verif[1] += (uint64_t)(v + 4)->x[i] << (8 * i);
+		ret = ((u64 + 4)->sign == (v + 4)->sign
+			&& (u64 + 4)->x == verif[1]) ? true : false;
+	}
+	return (ret);
 }
 
 int			verif_op(char **argv)
@@ -329,7 +339,10 @@ int			verif_op(char **argv)
 	t_varint	 	v[5];
 	t_varint		p, q;
 
-	rand_init_u64_v(u64, v, argv);	
+	ft_dprintf(2, "%sIN : VERIF_OP\n%s", KWHT, KNRM);
+	if (!rand_init_u64_v(u64, v, argv)
+		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
+		return (-42);	
 	//show_var(0, 2, u64, v);	
 
 	/*
@@ -465,28 +478,24 @@ int			verif_op(char **argv)
 	}
 
 	/*
-	**	¿ERR?
+	**	ERR CHECK AND VERIFICATION
 	*/
+	int ret;
 
-	if (v[3].len > 8 || v[4].len > 8)
-		ft_dprintf(2, U64_OVFL, KYEL, KNRM);
+	if ((v[3].len > 8 || v[4].len > 8)
+			&& ft_dprintf(2, U64_OVFL, KRED, KNRM))
+		ret = -42;
 	else if (is_g_v(3, v[3]) || is_g_v(3, v[4]))
-		return (-42);	
+		ret = -42;
+	else	
+		ret = verify(argv[2], u64, v) ? 42 : -42;
 
-	/*
-	**	VERIFICATION
-	**
-	** ret == 42 for SUCCES printing and -42 for FAILURE
-	** 2nd param: 	0 -> only print operand var 
-	**					1 -> print operand var and first result
-	**					2 -> print all var
-	*/
 
-	int ret = verify(argv[2], u64, v) ? 42 : -42;
 	if (ret == -42) {
 		show_var(ret, 1, u64, v);
 //		v_print(&p, "p", -2, KYEL);		
 //		v_print(&q, "q", -2, KYEL);		
 	}
+	ft_dprintf(2, "%sOUT VERIF_OP\n%s", KWHT, KNRM);
 	return (ret);
 }
