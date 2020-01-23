@@ -87,10 +87,15 @@ static void		rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv)
 }
 
 
-//V_TYPE = uint64_t, len = 32 (2 * 16)
+/*
+** initialisation for crt vs expmod speed_test
+** V_TYPE = uint64_t, V_MAX_LEN = 33 (2 * 16 + 1)
+**
+** NB: need to be in manual line 284 and 296 
+*/
+  
 static void	manual_init_1024_x2_prime(t_varint *v, t_varint *p, t_varint *q)
 {
-	//for crt verif speed
 
 	v[0].sign = 1;
 	v[0].len = 32;
@@ -252,6 +257,7 @@ int			speed_op(char **argv)
 //	manual_init_1024_x2_prime(v, &p, &q);
 	rand_init_u64_v(NULL, v, argv);	
 
+	ft_printf("COUCOU\n");
 	if (!ft_strcmp("cmp_lt", argv[2]))
 		v_cmp(v[0], "-lt", v[1]);
 	if (!ft_strcmp("cmp_eq", argv[2]))
@@ -310,6 +316,7 @@ int			speed_op(char **argv)
 		ft_dprintf(2, "%s'%s' : unknown operator%s\n", KRED, argv[2], KNRM);
 		return (-42);
 	}
+	ft_printf("YOP\n");
 	if (is_g_v(3, v[3]) || is_g_v(3, v[4]))
 		return (-42);	
 	return (42);
@@ -439,8 +446,9 @@ int			verif_op(char **argv)
 	}
 	else if (!ft_strcmp("gcd", argv[2]))
 	{
-		u64[3].sign = 1;
+		u64[0].sign = u64[1].sign = 1;
 		u64[3].x = gcd(u64[0].x, u64[1].x);
+		v[0].sign = v[1].sign = 1;
 		v[3] = v_gcd(v[0], v[1]);
 	}
 	else if (!ft_strcmp("eea", argv[2]))
