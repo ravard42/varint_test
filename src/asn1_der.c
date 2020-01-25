@@ -11,7 +11,7 @@
 
 static int		basic_asn1_der_e(char *out_der)
 {
-	t_varint		v[3] = {{1, {42}, 1}, {1, {1, 1}, 2}, g_v[1]};
+	t_varint		v[3] = {{1, 1, {42}}, {1, 2, {1, 1}}, g_v[1]};
 //	t_varint		v[3] = {g_v[0], g_v[1], g_v[2]};
 	int			ret;
 

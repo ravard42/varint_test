@@ -35,18 +35,19 @@ int			speed_op(char **argv)
 
 	ft_dprintf(2, "%sIN : SPEED_OP\n%s", KWHT, KNRM);
 //	manual_init_1024_x2_prime(v, &p, &q);
-	if (!rand_init_u64_v(NULL, v, argv)
-		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
-		return (-42);	
+	manual_init_ovfl_tests(v);
+//	if (!rand_init_u64_v(NULL, v, argv)
+//		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
+//		return (-42);	
 
 	if (!ft_strcmp("cmp_lt", argv[2]))
 		v_cmp(v[0], "-lt", v[1]);
 	if (!ft_strcmp("cmp_eq", argv[2]))
 		v_cmp(v[0], "-eq", v[1]);
 	else if (!ft_strcmp("add", argv[2]))
-		v[3] = v_add(v[0], v[1]);
+		v[3] = v_add(v[0], v[1], true);
 	else if (!ft_strcmp("sub", argv[2]))
-		v[3] = v_sub(v[0], v[1]);
+		v[3] = v_sub(v[0], v[1], true);
 	else if (!ft_strcmp("mul", argv[2]))
 		v[3] = v_mul(v[0], v[1]);
 	else if (!ft_strcmp("exp", argv[2])) {
@@ -100,6 +101,7 @@ int			speed_op(char **argv)
 		return (-42);
 	}
 	int ret = (is_g_v(3, v[3]) || is_g_v(3, v[4])) ? -42 : 42;
+	show_var(ret, 2, NULL, v);
 	ft_dprintf(2, "%sOUT SPEED_OP\n%s", KWHT, KNRM);
 	return (ret);
 }

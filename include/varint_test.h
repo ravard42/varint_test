@@ -13,6 +13,7 @@
 void		show_var(int state, int res, t_u64 *u, t_varint *v);
 bool		rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv);
 void		manual_init_1024_x2_prime(t_varint *v, t_varint *p, t_varint *q);
+void		manual_init_ovfl_tests(t_varint *v);
 bool		verify(char *op, t_u64 *u64, t_varint *v);
 
 int			speed_op(char **argv);

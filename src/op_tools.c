@@ -11,22 +11,30 @@
 void			show_var(int state, int res, t_u64 *u, t_varint *v)
 {
 	if (state == 42)
-		ft_printf("%s<----SUCCES---->%s\n", KGRN, KNRM);
+		ft_printf("\n%s<--------------SHOW_VAR : SUCCES--------------->%s\n", KGRN, KNRM);
 	else if (state == -42)
-		ft_printf("%s<----FAILED---->%s\n", KRED, KNRM);
-	for (int i = 0; i < 3; i++)
-		u64_print(u[i], i, KMAG);	
+		ft_printf("\n%s<--------------SHOW_VAR : FAILED--------------->%s\n", KRED, KNRM);
+	if (u)
+		for (int i = 0; i < 3; i++)
+			u64_print(u[i], i, KMAG);	
 	for (int i = 0; i < 3; i++)
 		v_print(v + i, "", i, KMAG);
 	if (res >= 1)
 	{
-		u64_print(u[3], 3, KCYN);	
-		if (res == 2)
-			u64_print(u[4], 4, KCYN);	
+		if (u)
+		{
+			u64_print(u[3], 3, KCYN);	
+			if (res == 2)
+				u64_print(u[4], 4, KCYN);
+		}
 		v_print(v + 3, "", 3, KCYN);
 		if (res == 2)
 			v_print(v + 4, "", 4, KCYN);
 	}
+	if (state == 42)
+		ft_printf("%s<-----------------SHOW_VAR OUT---------------------->%s\n", KGRN, KNRM);
+	else if (state == -42)
+		ft_printf("%s<-----------------SHOW_VAR OUT---------------------->%s\n", KRED, KNRM);
 }
 
 /*
@@ -58,7 +66,7 @@ bool			rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv)
 }
 
 /*
-** Only for speed_op.c
+** Only for speed_op.c (argv[3] et argv[4] useless here)
 **
 ** initialisation for crt vs expmod speed test
 ** V_TYPE = uint64_t, V_MAX_LEN = 65 (2 * 32 + 1)
@@ -213,6 +221,28 @@ void			manual_init_1024_x2_prime(t_varint *v, t_varint *p, t_varint *q)
 	v[2].x[29] = 0x957c5a2d54401937; 
 	v[2].x[30] = 0x2f0080f8b385b8ce; 
 	v[2].x[31] = 0x589c091f8a9542b; 
+}
+
+/*
+** Only for speed_op.c (argv[3] et argv[4] useless here)
+**
+** initialisation for v_'op'_ovfl tests
+** V_TYPE = uint8_t, V_MAX_LEN = 2
+**
+*/
+
+void			manual_init_ovfl_tests(t_varint *v)
+{
+	for (int i = 0; i < 5; i++)
+	{
+		v[i] = g_v[0];
+		if (i < 3)
+		{
+			v[i].x[0] = 0xff;
+			v[i].x[1] = 0x01;
+			v[i].len = 2;
+		}
+	}
 }
 
 /*

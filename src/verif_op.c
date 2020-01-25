@@ -39,7 +39,7 @@ int			verif_op(char **argv)
 	t_varint	 	v[5];
 	t_varint		p, q;
 
-//	ft_dprintf(2, "%sIN : VERIF_OP\n%s", KWHT, KNRM);
+	ft_dprintf(2, "%sIN : VERIF_OP\n%s", KWHT, KNRM);
 	if (!rand_init_u64_v(u64, v, argv)
 		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
 		return (-42);	
@@ -85,12 +85,14 @@ int			verif_op(char **argv)
 	*/
 
 	if (!ft_strcmp("add", argv[2])) {
+//		v_print(v, "a", -2, KYEL);
+//		v_print(v + 1, "b", -2, KYEL);
 		u64[3] = u64_add(u64[0], u64[1]);
-		v[3] = v_add(v[0], v[1]);
+		v[3] = v_add(v[0], v[1], true);
 	}
 	else if (!ft_strcmp("sub", argv[2])) {
 		u64[3] = u64_sub(u64[0], u64[1]);
-		v[3] = v_sub(v[0], v[1]);
+		v[3] = v_sub(v[0], v[1], true);
 	}
 	else if (!ft_strcmp("mul", argv[2])) {
 		u64[3] = u64_mul(u64[0], u64[1]);
@@ -180,11 +182,11 @@ int			verif_op(char **argv)
 		ret = verify(argv[2], u64, v) ? 42 : -42;
 
 
-	if (ret == -42) {
-		show_var(ret, 1, u64, v);
-		v_print(&p, "p", -2, KYEL);		
-		v_print(&q, "q", -2, KYEL);		
-	}
-//	ft_dprintf(2, "%sOUT VERIF_OP\n%s", KWHT, KNRM);
+//	if (ret == -42) {
+//		show_var(ret, 1, u64, v);
+//		v_print(&p, "p", -2, KYEL);		
+//		v_print(&q, "q", -2, KYEL);		
+//	}
+	ft_dprintf(2, "%sOUT VERIF_OP\n%s", KWHT, KNRM);
 	return (ret);
 }
