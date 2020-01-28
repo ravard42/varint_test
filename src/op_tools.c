@@ -53,8 +53,12 @@ bool			rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv)
 
 	for (int i = 0; i < 3; i++)
 	{
-		if (is_g_v(3, v[i] = v_rand(atoi(argv[3]), true)))
+		v[i] = v_rand(atoi(argv[3]), true);
+		if (is_g_v(3, v + i))
 			return (false);
+		
+//		if (is_g_v(3, v[i] = v_rand(atoi(argv[3]), true)))
+//			return (false);
 		if (u64)
 		{
 			u64[i].sign = v[i].sign;
@@ -238,8 +242,8 @@ void			manual_init_ovfl_tests(t_varint *v)
 		v[i] = g_v[0];
 		if (i < 3)
 		{
+			v[i].x[1] = 0xff;
 			v[i].x[0] = 0xff;
-			v[i].x[1] = 0x01;
 			v[i].len = 2;
 		}
 	}

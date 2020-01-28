@@ -33,36 +33,37 @@ int			speed_op(char **argv)
 	t_varint	 	v[5];
 	t_varint		p, q;
 
-	ft_dprintf(2, "%sIN : SPEED_OP\n%s", KWHT, KNRM);
+//	ft_dprintf(2, "%sIN : SPEED_OP\n%s", KWHT, KNRM);
 //	manual_init_1024_x2_prime(v, &p, &q);
-	manual_init_ovfl_tests(v);
-//	if (!rand_init_u64_v(NULL, v, argv)
-//		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
-//		return (-42);	
+//	manual_init_ovfl_tests(v);
+
+	if (!rand_init_u64_v(NULL, v, argv)
+		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
+		return (-42);	
 
 	if (!ft_strcmp("cmp_lt", argv[2]))
-		v_cmp(v[0], "-lt", v[1]);
+		v_cmp(v, "-lt", v + 1, true);
 	if (!ft_strcmp("cmp_eq", argv[2]))
-		v_cmp(v[0], "-eq", v[1]);
+		v_cmp(v, "-eq", v + 1, true);
 	else if (!ft_strcmp("add", argv[2]))
 		v[3] = v_add(v[0], v[1], true);
 	else if (!ft_strcmp("sub", argv[2]))
 		v[3] = v_sub(v[0], v[1], true);
 	else if (!ft_strcmp("mul", argv[2]))
-		v[3] = v_mul(v[0], v[1]);
+		v[3] = v_mul(v[0], v[1], true);
 	else if (!ft_strcmp("exp", argv[2])) {
 		v[1].sign = 1;
-		v[0].x[0] %= 20;		
-		v[1].x[0] %= 16;		
+//		v[0].x[0] %= 17;	
+//		v[1].x[0] %= 17;
 		v[3] = v_exp(v[0], v[1]);
 	}
 	else if (!ft_strcmp("div", argv[2])) {
-		v[1] = is_g_v(0, v[1]) ? g_v[1] : v[1];
-		v[3] = v_div(v[0], v[1]);
+		v[1] = is_g_v(0, v + 1) ? g_v[1] : v[1];
+		v[3] = v_div(v[0], v[1], true);
 	}
 	else if (!ft_strcmp("mod", argv[2])) {
-		v[1] = is_g_v(0, v[1]) ? g_v[1] : v[1];
-		v[3] = v_mod(v[0], v[1], true);
+		v[1] = is_g_v(0, v + 1) ? g_v[1] : v[1];
+		v[3] = v_mod(v[0], v[1], true, true);
 	}
 	else if (!ft_strcmp("expmod", argv[2]))
 	{
@@ -73,7 +74,7 @@ int			speed_op(char **argv)
 
 //		random
 		v[1].sign = 1;
-		v[2] = is_g_v(0, v[2]) ? g_v[1] : v[2];
+		v[2] = is_g_v(0, v + 2) ? g_v[1] : v[2];
 		v[3] = v_expmod(v[0], v[1], v[2], true);
 	}
 	else if (!ft_strcmp("crt", argv[2]))
@@ -100,8 +101,9 @@ int			speed_op(char **argv)
 		ft_dprintf(2, "%s'%s' : unknown operator%s\n", KRED, argv[2], KNRM);
 		return (-42);
 	}
-	int ret = (is_g_v(3, v[3]) || is_g_v(3, v[4])) ? -42 : 42;
-	show_var(ret, 2, NULL, v);
-	ft_dprintf(2, "%sOUT SPEED_OP\n%s", KWHT, KNRM);
+	int ret = (is_g_v(3, v + 3) || is_g_v(3, v + 4)) ? -42 : 42;
+	if (ret == -42)
+		show_var(ret, 2, NULL, v);
+//	ft_dprintf(2, "%sOUT SPEED_OP\n%s", KWHT, KNRM);
 	return (ret);
 }

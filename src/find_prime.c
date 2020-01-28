@@ -31,14 +31,14 @@ static int	miller_witness(t_varint n, t_varint s, t_varint d)
 	n_min_1 = v_dec(n);
 	a = v_rand_a(n);	
 	r = v_expmod(a, d, n, true);
-	if (is_g_v(1, r)
-		|| v_cmp(r, "-eq", n_min_1))
+	if (is_g_v(1, &r)
+		|| v_cmp(&r, "-eq", &n_min_1, true))
 		return false;
 	i = g_v[1];
-	while (v_cmp(i, "-lt", s))
+	while (v_cmp(&i, "-lt", &s, true))
 	{
 		r = v_expmod(r, g_v[2], n, true);
-		if (v_cmp(r, "-eq", n_min_1))
+		if (v_cmp(&r, "-eq", &n_min_1, true))
 			return (false);
 		i = v_inc(i);
 	}
@@ -49,6 +49,7 @@ static int	miller_witness(t_varint n, t_varint s, t_varint d)
 static bool	first_prime_composite(t_varint n)
 {
 	t_varint	p;
+	t_varint	lvalue_required;
 	int		i;
 
 	i = -1;
@@ -58,10 +59,13 @@ static bool	first_prime_composite(t_varint n)
 		p.x[0] = g_prime[i];
 		p.x[1] = (V_SUP == 0xff) ? *((uint8_t *)(g_prime + i) + 1) : 0;
 		p.len = (p.x[1]) ? 2 : 1;
-		if (v_cmp(n, "-eq", p))
+		if (v_cmp(&n, "-eq", &p, true))
 			return (false);
-		if(is_g_v(0, v_mod(n, p, true)))
+		lvalue_required = v_mod(n, p, true, true);
+		if(is_g_v(0, &lvalue_required))
 			return (true);
+//		if(is_g_v(0, v_mod(n, p, true, true)))
+//			return (true);
 	}
 	return (false);
 }
@@ -72,17 +76,24 @@ bool			prob_prim_test(t_varint n)
 	t_varint	n_min_1;
 	t_varint s;
 	t_varint d;
+	t_varint	lvalue_required;
 
 	if (first_prime_composite(n)
-		|| v_cmp(n, "-le", g_v[2]))
+		|| v_cmp(&n, "-le", &g_v[2], true))
 		return (false);
 	nb_a = 1;
 	n_min_1 = v_dec(n);
 	s = g_v[1];
-	while (is_g_v(0, v_mod(n_min_1, v_exp(g_v[2], s), true)))
+//	while (is_g_v(0, v_mod(n_min_1, v_exp(g_v[2], s), true, true)))
+//		s = v_inc(s);
+	lvalue_required = v_mod(n_min_1, v_exp(g_v[2], s), true, true);
+	while (is_g_v(0, &lvalue_required))
+	{
 		s = v_inc(s);
+		lvalue_required = v_mod(n_min_1, v_exp(g_v[2], s), true, true);
+	}
 	s = v_dec(s);
-	d = v_div(n_min_1, v_exp(g_v[2], s));
+	d = v_div(n_min_1, v_exp(g_v[2], s), true);
 	while (nb_a--)
 		if (miller_witness(n, s, d))
 			return (false);
