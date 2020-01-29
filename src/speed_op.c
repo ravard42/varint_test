@@ -40,6 +40,11 @@ int			speed_op(char **argv)
 	if (!rand_init_u64_v(NULL, v, argv)
 		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
 		return (-42);	
+//	for(int i = 0; i < 5000000; i++)
+//		is_g_v(0, v);
+//	return 42;
+
+
 
 	if (!ft_strcmp("cmp_lt", argv[2]))
 		v_cmp(v, "-lt", v + 1, true);
