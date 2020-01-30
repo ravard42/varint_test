@@ -1,23 +1,22 @@
 #include "varint_test.h"
 
 /*
-**	here we test our operators comparing with uint64_t operators resultats
-**	make sure V_TYPE set to uint8_t and len = atoi(argv[3]) <= 8
+**	Here we test our operators comparing with uint64_t operators resultats.
+**	Make sure V_TYPE set to uint8_t and len = atoi(argv[3]) <= 8.
 **
-**		about uint64_t tests possibilities and varint.h settings:
+**		about verif_op test possibilities and varint.h settings:
 **
-**		len <= 8 for cmp_lt and cmp_eq
+**		len <= 8 for cmp_lt, cmp_eq, div, mod, gcd and eea
 **			V_MAX_LEN >= len
-**		len <= 8 for div, mod, gcd and eea
-**			WARNING : V_MAX_LEN >= len + 1
 **		len <= 7 for add and sub 
 **			WARNING : V_MAX_LEN >= len + 1
-**		len <= 4 for mul, expmod and crt 
-**			WARNING : V_MAX_LEN >= 2 * len + 1
+**		len <= 4 for mul, expmod, crt 
+**			WARNING : V_MAX_LEN >= 2 * len
 **		len == 1 for exp with %16 hardcoded see line ~100
 **			V_MAX_LEN >= 8
 **		
-**		NB : oh yeah exp resultat really need 64bit of data for 4 bits operands
+**		NB : oh yeah exp resultat really need 64-bit of data for 4-bit operand
+**			 need 2^20-bit of data for 16-bit operand... (cf v_check.c)
 */
 
 /*
@@ -44,20 +43,8 @@ int			verif_op(char **argv)
 	if (!rand_init_u64_v(u64, v, argv)
 		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
 		return (-42);	
-//	u64[0].x = 7;
-//	u64[0].sign = -1;
-//	v[0].x[0] = 7;
-//	v[0].sign = -1;
-//
-//	u64[1].x = 4;
-//	u64[1].sign = 1;
-//	v[1].x[0] = 4;
-//	v[1].sign = 1;
-
-
-//	v[0].sign = -1;
-//	v[0].x[0] = 0xd3;
-//	v[1].x[0] = 0x70;
+//	show_var(-42, 0, u64, v);
+//	manual_init_u64_v(u64, v);
 
 	/*
 	**	CMP TESTS
@@ -96,27 +83,6 @@ int			verif_op(char **argv)
 	/*
 	**	OP TESTS
 	*/
-
-//	u64[0].x = 0xffff;
-//	u64[0].sign = 1;
-//	v[0].x[1] = 0xff;
-//	v[0].x[0] = 0xff;
-//	v[0].len = 2;
-//	v[0].sign = 1;
-//	
-//	u64[1].x = 0xffff;
-//	u64[1].sign = 1;
-//	v[1].x[1] = 0xff;
-//	v[1].x[0] = 0xff;
-//	v[1].len = 2;
-//	v[1].sign = 1;
-//	
-//	u64[2].x = 0xff;
-//	u64[2].sign = 1;
-//	v[2].x[1] = 0x00;
-//	v[2].x[0] = 0xff;
-//	v[2].len = 1;
-//	v[2].sign = 1;
 
 	if (!ft_strcmp("add", argv[2])) {
 //		v_print(v, "a", -2, KYEL);
@@ -178,15 +144,17 @@ int			verif_op(char **argv)
 	}
 	else if (!ft_strcmp("crt", argv[2]))
 	{
-//		p = find_prime(1, false);
-		p = g_v[2];
-		p.x[0] = 61;
-//		q = find_prime(1, false);
-		q = g_v[2];
-		q.x[0] = 47;
+		p = find_prime(2, false);
+//		p = g_v[2];
+//		p.x[0] = 61;
+		q = find_prime(2, false);
+		while (v_cmp(&p, "-eq", &q, true))
+			q = find_prime(1, false);
+//		q = g_v[2];
+//		q.x[0] = 47;
 
-		u64[1].sign = 1;
-		u64[2].sign = 1;
+		u64[1].sign = 2;
+		u64[2].sign = 2;
 		u64[2].x = (((uint64_t)p.x[1] << 8) + (uint64_t)p.x[0])
 			* (((uint64_t)q.x[1] << 8) + (uint64_t)q.x[0]);
 		u64[3] = u64_expmod(u64[0], u64[1], u64[2], true);
@@ -216,7 +184,7 @@ int			verif_op(char **argv)
 		ret = verify(argv[2], u64, v) ? 42 : -42;
 
 
-//	if (ret == -42 || ret == 42) {
+//	if (ret == -42) {
 //		show_var(ret, 1, u64, v);
 //		v_print(&p, "p", -2, KYEL);		
 //		v_print(&q, "q", -2, KYEL);		

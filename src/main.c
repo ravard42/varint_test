@@ -51,8 +51,8 @@ int	main(int argc, char **argv)
 {
 	if (argc == 1)
 		return (usage());
-	if (!ft_strcmp("speed_op", argv[1]) && argc == 4)
-		return (speed_op(argv));
+	if (!ft_strcmp("op", argv[1]) && argc == 4)
+		return (op(argv));
 	if (!ft_strcmp("verif_op", argv[1]) && argc == 4)
 	{
 		if (sizeof(V_TYPE) != 1

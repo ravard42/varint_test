@@ -1,9 +1,11 @@
 #include "varint_test.h"
 
 /* 
-**	Can be Used by both speed_op.c and verif_op.c
-**
-** 	2nd param: 	0 -> only print  3 operand var 
+**	for all functions in there set u to NULL if in op tests
+*/
+ 
+/*
+** 	res param: 	0 -> only print  3 operand var 
 **				1 -> print operand var and first result
 **				2 -> print all var
 */
@@ -37,11 +39,6 @@ void			show_var(int state, int res, t_u64 *u, t_varint *v)
 		ft_printf("%s<-----------------SHOW_VAR OUT---------------------->%s\n", KRED, KNRM);
 }
 
-/*
-**	Used by both speed_op.c and verif_op.c
-**	NB : in speed_op u64 = NULL
-*/
-
 bool			rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv)
 {
 	for(int i = 0; i < 5; i++)
@@ -50,15 +47,11 @@ bool			rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv)
 		if (u64)
 			u64[i] = g_u64_0;
 	}
-
 	for (int i = 0; i < 3; i++)
 	{
 		v[i] = v_rand(atoi(argv[3]), true);
 		if (is_g_v(3, v + i))
 			return (false);
-		
-//		if (is_g_v(3, v[i] = v_rand(atoi(argv[3]), true)))
-//			return (false);
 		if (u64)
 		{
 			u64[i].sign = v[i].sign;
@@ -70,13 +63,36 @@ bool			rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv)
 }
 
 /*
-** Only for speed_op.c (argv[3] et argv[4] useless here)
+** argv[3] useless here
+*/
+
+bool		manual_init_u64_v(t_u64 *u64, t_varint *v)
+{
+	for(int i = 0; i < 5; i++)
+	{
+		v[i] = g_v[0];
+		if (u64)
+			u64[i] = g_u64_0;
+	}
+	// init here
+	return true;
+}
+
+
+/*
+** EXPMOD VS CRT TEST
+** Only for op.c 
+** argv[3] useless here
 **
 ** initialisation for crt vs expmod speed test
-** V_TYPE = uint64_t, V_MAX_LEN = 65 (2 * 32 + 1)
+** V_TYPE = uint64_t, V_MAX_LEN = 64 
+** 1024 bits <--> 16 uint64_t
+** so modulus stored in 32 uint64_t
+** and need 64 uint64_t for expmod
 **
-** NB: need to be in manual in speed_op.c
+** NB: need to switch in manual in op.c
 */
+
 void			manual_init_1024_x2_prime(t_varint *v, t_varint *p, t_varint *q)
 {
 	for (int i = 0; i < 5; i++)
@@ -225,28 +241,6 @@ void			manual_init_1024_x2_prime(t_varint *v, t_varint *p, t_varint *q)
 	v[2].x[29] = 0x957c5a2d54401937; 
 	v[2].x[30] = 0x2f0080f8b385b8ce; 
 	v[2].x[31] = 0x589c091f8a9542b; 
-}
-
-/*
-** Only for speed_op.c (argv[3] et argv[4] useless here)
-**
-** initialisation for v_'op'_ovfl tests
-** V_TYPE = uint8_t, V_MAX_LEN = 2
-**
-*/
-
-void			manual_init_ovfl_tests(t_varint *v)
-{
-	for (int i = 0; i < 5; i++)
-	{
-		v[i] = g_v[0];
-		if (i < 3)
-		{
-			v[i].x[1] = 0xff;
-			v[i].x[0] = 0xff;
-			v[i].len = 2;
-		}
-	}
 }
 
 /*

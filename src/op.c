@@ -1,19 +1,21 @@
 #include "varint_test.h"
 
 /*
-**	here we test the speed of our operators (time sh varint_test.sh)
-**	AND overflow errors, checking the return value of our operator
+**	Here we run varint operators on randomely choose varint variables,
+**	then we can test the rapidity of our operators (time sh varint_test.sh op [...])
+**	or test overflow errors, checking the return value of our operator.
+**	We can test operators on manual input settings too with manual_init_u64_v func
+**	or compare the v_expmod and v_crt with manual_init_1024_x2_prime.
 **
 **	V_TYPE and len = atoi(argv[3]) has no limitation here 
 **	(juste the adjustement of V_MAX_LEN in varint.h to avoid overflows)
 **
 **		more particularly about operator overflows:
 **
-**		cmp_lt and cmp_eq  					<---> 	V_MAX_LEN >= len
-**		add, sub, div, mod, gcd and eea 	<--->	V_MAX_LEN >= len + 1
-**		mul, expmod and crt 				<--->	V_MAX_LEN >= 2 * len + 1
-**		exp									<--->	V_MAX_LEN >= ? 
-**													(cf 4bit long operands example in verif_op.c)
+**		cmp_lt, cmp_eq, div, mod, gcd and eea	<---> 	V_MAX_LEN >= len
+**		add, sub								<--->	V_MAX_LEN >= len + 1
+**		mul, expmod, crt			 			<--->	V_MAX_LEN >= 2 * len
+**		exp										<--->	len <= 2 cf v_check.c
 */
 
 /*
@@ -28,23 +30,18 @@
 **	 	4			2nd res (for eea)
 */
 
-int			speed_op(char **argv)
+int			op(char **argv)
 {
 	t_varint	 	v[5];
 	t_varint		p, q;
 
 //	ft_dprintf(2, "%sIN : SPEED_OP\n%s", KWHT, KNRM);
-//	manual_init_1024_x2_prime(v, &p, &q);
-//	manual_init_ovfl_tests(v);
-
+	
 	if (!rand_init_u64_v(NULL, v, argv)
 		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
 		return (-42);	
-//	for(int i = 0; i < 5000000; i++)
-//		is_g_v(0, v);
-//	return 42;
-
-
+//	manual_init_u64_v(NULL, v);
+//	manual_init_1024_x2_prime(v, &p, &q);
 
 	if (!ft_strcmp("cmp_lt", argv[2]))
 		v_cmp(v, "-lt", v + 1, true);
@@ -82,6 +79,13 @@ int			speed_op(char **argv)
 		v[2] = is_g_v(0, v + 2) ? g_v[1] : v[2];
 		v[3] = v_expmod(v[0], v[1], v[2], true);
 	}
+	else if (!ft_strcmp("gcd", argv[2]))
+		v[3] = v_gcd(v[0], v[1]);
+	else if (!ft_strcmp("eea", argv[2]))
+	{
+		v[0].sign = v[1].sign = 1;
+		v_eea(v + 3, v[0], v[1]);
+	}
 	else if (!ft_strcmp("crt", argv[2]))
 	{
 		//manual
@@ -93,13 +97,6 @@ int			speed_op(char **argv)
 		q = find_prime(atoi(argv[3]) / 2, false);
 		v[1].sign = 1;
 		v[3] = v_crt(v[0], v[1], p, q);	
-	}
-	else if (!ft_strcmp("gcd", argv[2]))
-		v[3] = v_gcd(v[0], v[1]);
-	else if (!ft_strcmp("eea", argv[2]))
-	{
-		v[0].sign = v[1].sign = 1;
-		v_eea(v + 3, v[0], v[1]);
 	}
 	else
 	{
