@@ -104,8 +104,8 @@ int			op(char **argv)
 		return (-42);
 	}
 	int ret = (is_g_v(3, v + 3) || is_g_v(3, v + 4)) ? -42 : 42;
-	if (ret == -42)
-		show_var(ret, 2, NULL, v);
+//	if (ret == -42)
+//		show_var(ret, 2, NULL, v);
 //	ft_dprintf(2, "%sOUT SPEED_OP\n%s", KWHT, KNRM);
 	return (ret);
 }

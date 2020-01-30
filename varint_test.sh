@@ -14,15 +14,15 @@ KWHT="\x1B[37;1m"
 
 #-----OP TESTS-----
 
-if [[ $1 == "speed_op" || $1 == "verif_op" ]] && (($# == 4));then
+if [[ $1 == "op" || $1 == "verif_op" ]] && (($# == 4));then
 # $2 : op to process
 # $3 : numb of V_TYPE 
 # $4 : numb of test
 
 
-if [[ $1 == "speed_op" ]];then
+if [[ $1 == "op" ]];then
 COL=$KYEL
-echo -e "${KBLU}SPEED_OP TEST START${KNRM}\n"
+echo -e "${KBLU}OP TEST START${KNRM}\n"
 else
 COL=$KGRN
 echo -e "${KBLU}VERIF_OP TEST START${KNRM}\n"
