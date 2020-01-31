@@ -40,11 +40,11 @@ static t_varint		v_rand_a(t_varint n)
 	V_TYPE				rand_a[n.len];
 	t_varint				a;
 
+	ft_rand(rand_a, n.len * V_LEN);
 	if (n.len == 1)
-		rand_a[0] = ft_range(*(V_TYPE *)ft_rand(rand_a, V_LEN), 2, n.x[0] - 1);
+		rand_a[0] = ft_range(rand_a[0], 2, n.x[0] - 1);
 	else
 	{
-		ft_rand(rand_a, n.len * V_LEN);
 		rand_a[0] = ft_range(rand_a[0], 2, V_SUP);
 		rand_a[n.len - 1] = ft_range(rand_a[n.len - 1], 0, n.x[n.len - 1] - 1);
 	}
@@ -54,20 +54,21 @@ static t_varint		v_rand_a(t_varint n)
 
 static int	miller_witness(t_varint n, t_varint s, t_varint d)
 {
-	t_varint	n_min_1;
 	t_varint	a;
 	t_varint r;
 	t_varint	i;
+	t_varint	n_min_1;
 
-	n_min_1 = v_sub(n, g_v[1], false);
 	a = v_rand_a(n);	
 	r = v_expmod(a, d, n, false);
+	n_min_1 = v_sub(n, g_v[1], false);
 	if (is_g_v(1, &r)
 		|| v_cmp(&r, "-eq", &n_min_1, false))
 		return false;
 	i = g_v[1];
 	while (v_cmp(&i, "-lt", &s, false))
 	{
+		v_print(&i, "i", -2, KYEL);
 		r = v_expmod(r, g_v[2], n, false);
 		if (v_cmp(&r, "-eq", &n_min_1, false))
 			return (false);
@@ -84,8 +85,8 @@ bool			prob_prim_test(t_varint n)
 	t_varint d;
 	t_varint	lvalue_required;
 
-	if (first_prime_composite(n)
-		|| v_cmp(&n, "-le", &g_v[2], false))
+	if (v_cmp(&n, "-le", &g_v[2], false)
+		|| first_prime_composite(n))
 		return (false);
 	nb_a = 1;
 	n_min_1 = v_sub(n, g_v[1], false);
