@@ -5,7 +5,7 @@
 **	then we can test the rapidity of our operators (time sh varint_test.sh op [...])
 **	or test overflow errors, checking the return value of our operator.
 **	We can test operators on manual input settings too with manual_init_u64_v func
-**	or compare the v_expmod and v_crt with manual_init_1024_x2_prime.
+**	or compare the v_expmod and v_crt with manual_init_1024_x2_prime_test.
 **
 **	len = atoi(argv[3]) has no limitation here 
 **	(juste the adjustement of V_MAX_LEN in varint.h to avoid overflows)
@@ -54,13 +54,17 @@ static bool	show_n_free(t_bigint *b, t_varint *v, bool show)
 int			op(char **argv)
 {
 	t_varint	 	v[5];
-	t_varint		p, q;
 
 //	ft_dprintf(2, "%sIN : SPEED_OP\n%s", KWHT, KNRM);
+	for (int i = 0; i < 5; i++)
+		v[i] = g_v[0];
+
 	
-	if (!rand_init_u64_v(NULL, v, argv)
-		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
-		return (-42);
+//	if (!rand_init_u64_v(NULL, v, argv)
+//		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
+//		return (-42);
+
+//	manual_init_u64_v(NULL, v);
 
 	if (!ft_strcmp("nnaumenk", argv[2]))
 	{
@@ -107,8 +111,7 @@ int			op(char **argv)
 		return (42);
 	}
 
-//	manual_init_u64_v(NULL, v);
-//	manual_init_1024_x2_prime(v, &p, &q);
+
 
 	if (!ft_strcmp("cmp_lt", argv[2]))
 		v_cmp(v, "-lt", v + 1, true);
@@ -136,21 +139,37 @@ int			op(char **argv)
 	}
 	else if (!ft_strcmp("expmod", argv[2]))
 	{
-		//manual
-//		v[3] = v_expmod(v[0], v[1], v_mul(p, q), true);
-//		v_print(v + 3, "v[3]", -2, KYEL);
+		t_varint		p, q;
 
+		//ASN1_DER_INIT
+		asn1_der_init(v, "der_files/v0_v1_v2.der"); // v[2] = p * q
+		asn1_der_init(&p, "der_files/p.der");
+		asn1_der_init(&q, "der_files/q.der");
+		v[3] = v_expmod(v[0], v[1], v_mul(p, q, true), true);
+		show_var(0, 2, NULL, v);
 
-//		random
-		v[1].sign = 1;
-
-//		v[0].sign = v[2].sign = 1;
-
-		v[2] = is_g_v(0, v + 2) ? g_v[1] : v[2];
-//		ft_printf("IN expmod\n");
-		v[3] = v_expmod(v[0], v[1], v[2], true);
-//		ft_printf("OUT expmod\n");
+		//RANDOM_INIT
+//		v[1].sign = 1;
+//		v[2] = is_g_v(0, v + 2) ? g_v[1] : v[2];
+//		v[3] = v_expmod(v[0], v[1], v[2], true);
 //		show_var(42, 1, NULL, v);
+	}
+	else if (!ft_strcmp("crt", argv[2]))
+	{
+		t_varint		p, q;
+		
+		//ASN1_DER_INIT
+		asn1_der_init(v, "der_files/v0_v1_v2.der"); // v[2] = p * q
+		asn1_der_init(&p, "der_files/p.der");
+		asn1_der_init(&q, "der_files/q.der");
+		v[3] = v_crt(v[0], v[1], p, q);
+		show_var(0, 2, NULL, v);
+		
+		//RANDOM_INIT
+//		p = find_prime(atoi(argv[3]) / 2, false);
+//		q = find_prime(atoi(argv[3]) / 2, false);
+//		v[1].sign = 1;
+//		v[3] = v_crt(v[0], v[1], *p, *q);
 	}
 	else if (!ft_strcmp("gcd", argv[2]))
 		v[3] = v_gcd(v[0], v[1]);
@@ -158,18 +177,6 @@ int			op(char **argv)
 	{
 		v[0].sign = v[1].sign = 1;
 		v_eea(v + 3, v[0], v[1]);
-	}
-	else if (!ft_strcmp("crt", argv[2]))
-	{
-		//manual
-//		v[3] = v_crt(v[0], v[1], p, q);	
-//		v_print(v + 3, "v[3]", -2, KYEL);
-		
-//		random
-		p = find_prime(atoi(argv[3]) / 2, false);
-		q = find_prime(atoi(argv[3]) / 2, false);
-		v[1].sign = 1;
-		v[3] = v_crt(v[0], v[1], p, q);	
 	}
 	else
 	{
@@ -179,6 +186,7 @@ int			op(char **argv)
 	int ret = (is_g_v(3, v + 3) || is_g_v(3, v + 4)) ? -42 : 42;
 //	if (ret == -42)
 //		show_var(ret, 2, NULL, v);
+
 //	ft_dprintf(2, "%sOUT SPEED_OP\n%s", KWHT, KNRM);
 	return (ret);
 }

@@ -34,9 +34,14 @@
 int			verif_op(char **argv)
 {
 
-	t_u64			u64[5]; 
-	t_varint	 	v[5];
+	t_u64			u64[5] = {g_u64_0};
+	t_varint	 	v[5] = {g_v[0]};
 	t_varint		p, q;
+
+	for (int i = 0; i < 5; i++) {
+		u64[i] = g_u64_0;
+		v[i] = g_v[0];
+	}
 
 	
 //	ft_dprintf(2, "%sIN : VERIF_OP\n%s", KWHT, KNRM);
@@ -85,8 +90,6 @@ int			verif_op(char **argv)
 	*/
 
 	if (!ft_strcmp("add", argv[2])) {
-//		v_print(v, "a", -2, KYEL);
-//		v_print(v + 1, "b", -2, KYEL);
 		u64[3] = u64_add(u64[0], u64[1]);
 		v[3] = v_add(v[0], v[1], true);
 	}
