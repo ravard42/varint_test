@@ -7,7 +7,7 @@
 **	We can test operators on manual input settings too with manual_init_u64_v func
 **	or compare the v_expmod and v_crt with manual_init_1024_x2_prime.
 **
-**	uint8_t and len = atoi(argv[3]) has no limitation here 
+**	len = atoi(argv[3]) has no limitation here 
 **	(juste the adjustement of V_MAX_LEN in varint.h to avoid overflows)
 **
 **		more particularly about operator overflows:
