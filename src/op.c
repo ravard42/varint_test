@@ -60,9 +60,9 @@ int			op(char **argv)
 		v[i] = g_v[0];
 
 	
-//	if (!rand_init_u64_v(NULL, v, argv)
-//		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
-//		return (-42);
+	if (!rand_init_u64_v(NULL, v, argv)
+		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
+		return (-42);
 
 //	manual_init_u64_v(NULL, v);
 
@@ -139,26 +139,26 @@ int			op(char **argv)
 	}
 	else if (!ft_strcmp("expmod", argv[2]))
 	{
-		t_varint		p, q;
 
 		//ASN1_DER_INIT
-		asn1_der_init(v, "der_files/v0_v1_v2.der"); // v[2] = p * q
-		asn1_der_init(&p, "der_files/p.der");
-		asn1_der_init(&q, "der_files/q.der");
-		v[3] = v_expmod(v[0], v[1], v_mul(p, q, true), true);
-		show_var(0, 2, NULL, v);
+//		t_varint		p, q;
+//		asn1_der_init(v, "der_files/v0_v1_v2.der"); // v[2] = p * q
+//		asn1_der_init(&p, "der_files/p.der");
+//		asn1_der_init(&q, "der_files/q.der");
+//		v[3] = v_expmod(v[0], v[1], v_mul(p, q, true), true);
+//		show_var(0, 2, NULL, v);
 
 		//RANDOM_INIT
-//		v[1].sign = 1;
-//		v[2] = is_g_v(0, v + 2) ? g_v[1] : v[2];
-//		v[3] = v_expmod(v[0], v[1], v[2], true);
+		v[1].sign = 1;
+		v[2] = is_g_v(0, v + 2) ? g_v[1] : v[2];
+		v[3] = v_expmod(v[0], v[1], v[2], true);
 //		show_var(42, 1, NULL, v);
 	}
 	else if (!ft_strcmp("crt", argv[2]))
 	{
-		t_varint		p, q;
 		
 		//ASN1_DER_INIT
+		t_varint		p, q;
 		asn1_der_init(v, "der_files/v0_v1_v2.der"); // v[2] = p * q
 		asn1_der_init(&p, "der_files/p.der");
 		asn1_der_init(&q, "der_files/q.der");
@@ -186,6 +186,7 @@ int			op(char **argv)
 	int ret = (is_g_v(3, v + 3) || is_g_v(3, v + 4)) ? -42 : 42;
 //	if (ret == -42)
 //		show_var(ret, 2, NULL, v);
+//	show_var(ret, 2, NULL, v);
 
 //	ft_dprintf(2, "%sOUT SPEED_OP\n%s", KWHT, KNRM);
 	return (ret);
