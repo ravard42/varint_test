@@ -25,6 +25,7 @@ static int		basic_asn1_der_d(char *in_der)
 	t_varint *v;
 	int		nb_v;
 	int		id;
+	char		name[5] = {'v', '[', '0', ']', 0};
 
 	if (ft_read(&r, in_der) < 0 
 			&& ft_dprintf(2, "%sft_read error in asn1_der decoding\n%s", KRED, KNRM))
@@ -33,7 +34,10 @@ static int		basic_asn1_der_d(char *in_der)
 	{
 		id = -1;
 		while (++id < nb_v)
-			v_print(v + id, "id = ", id, KYEL);
+		{
+			name[2] = '0' + id;
+			v_print(name, v + id);
+		}
 		free(v);
 	}
 	free(r.msg);

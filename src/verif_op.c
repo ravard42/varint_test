@@ -2,7 +2,7 @@
 
 /*
 **	Here we test our operators comparing with uint64_t operators resultats.
-**	Make sure V_TYPE set to uint8_t and len = atoi(argv[3]) <= 8.
+**	Make sure len = atoi(argv[3]) <= 8.
 **
 **		about verif_op test possibilities and varint.h settings:
 **

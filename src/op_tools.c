@@ -12,6 +12,8 @@
 
 void			show_var(int state, int res, t_u64 *u, t_varint *v)
 {
+	char	name[5] = {'v', '[', '0', ']', 0};
+
 	if (state == 42)
 		ft_printf("\n%s<--------------SHOW_VAR : SUCCES--------------->%s\n", KGRN, KNRM);
 	else if (state == -42)
@@ -20,7 +22,10 @@ void			show_var(int state, int res, t_u64 *u, t_varint *v)
 		for (int i = 0; i < 3; i++)
 			u64_print(u[i], i, KMAG);	
 	for (int i = 0; i < 3; i++)
-		v_print(v + i, "", i, KMAG);
+	{
+		name[2] = '0' + i;
+		v_print(name, v + i);
+	}
 	if (res >= 1)
 	{
 		if (u)
@@ -29,9 +34,9 @@ void			show_var(int state, int res, t_u64 *u, t_varint *v)
 			if (res == 2)
 				u64_print(u[4], 4, KCYN);
 		}
-		v_print(v + 3, "", 3, KCYN);
+		v_print("v[3]", v + 3);
 		if (res == 2)
-			v_print(v + 4, "", 4, KCYN);
+			v_print("v[4]", v + 4);
 	}
 	if (state == 42)
 		ft_printf("%s<-----------------SHOW_VAR OUT---------------------->%s\n", KGRN, KNRM);
@@ -85,7 +90,7 @@ bool		manual_init_u64_v(t_u64 *u64, t_varint *v)
 ** argv[3] useless here
 **
 ** initialisation for crt vs expmod speed test
-** V_TYPE = uint64_t, V_MAX_LEN = 64 
+** uint8_t = uint64_t, V_MAX_LEN = 64 
 ** 1024 bits <--> 16 uint64_t
 ** so modulus stored in 32 uint64_t
 ** and need 64 uint64_t for expmod

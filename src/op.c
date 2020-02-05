@@ -7,7 +7,7 @@
 **	We can test operators on manual input settings too with manual_init_u64_v func
 **	or compare the v_expmod and v_crt with manual_init_1024_x2_prime.
 **
-**	V_TYPE and len = atoi(argv[3]) has no limitation here 
+**	uint8_t and len = atoi(argv[3]) has no limitation here 
 **	(juste the adjustement of V_MAX_LEN in varint.h to avoid overflows)
 **
 **		more particularly about operator overflows:
@@ -30,6 +30,27 @@
 **	 	4			2nd res (for eea)
 */
 
+
+static bool	show_n_free(t_bigint *b, t_varint *v, bool show)
+{
+		char		name[3] = {'b', '0', 0};
+
+		ft_printf("\n%sNNAUMENK%s\n", KYEL, KNRM);
+		for (int i = 0; i < 5; i++)
+		{
+			name[1] = '0' + i;
+			if (show && (b + i)->value)
+				ft_bigint_print(name, b + i);
+			if (b[i].value)
+				free(b[i].value);
+		}
+		ft_printf("\n%sRAVARD%s\n", KYEL, KNRM);
+		if (show && v)
+			show_var(0, 2, NULL, v);
+		ft_putchar('\n');
+		return (true);
+}
+
 int			op(char **argv)
 {
 	t_varint	 	v[5];
@@ -39,7 +60,53 @@ int			op(char **argv)
 	
 	if (!rand_init_u64_v(NULL, v, argv)
 		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
-		return (-42);	
+		return (-42);
+
+	if (!ft_strcmp("nnaumenk", argv[2]))
+	{
+		t_bigint b[5];
+
+		if (is_g_v(0, v + 1))
+			v[1] = g_v[1];
+		for (int i = 0; i < 5; i++)
+			b[i].value = NULL;
+	
+		for (int i = 0; i < 3; i++)
+		{
+			v[i].sign = 1;
+			b[i].size = v[i].len;
+			b[i].value = (unsigned char *)malloc(sizeof(unsigned char) * v[i].len);
+			ft_memcpy(b[i].value, v[i].x, v[i].len);
+			if (ft_memcmp(b[i].value, v[i].x, v[i].len)
+				&& ft_dprintf(2, "%sinit error%s\n", KRED, KNRM)
+				&& show_n_free(b, v, false))
+				return (-42);
+		}
+	
+		ft_bigint_mul(b + 3, b, b + 1);		
+		v[3] = v_mul(v[0], v[1], true);
+//		ft_bigint_div(b + 4, b + 3, b, b + 1);		
+//		v[4] = v_div(v[0], v[1], true);
+//		v[3] = v_mod(v[0], v[1], true, true);
+//		v[3] = v_mod(v[0], v[1], true, true);
+		
+	
+//		if (!is_g_v(0, v + 4) && 
+//			(ft_memcmp(b[4].value, v[4].x, v[4].len)
+//			|| ft_memcmp(b[4].value, v[4].x, v[4].len)))
+		if (ft_memcmp(b[3].value, v[3].x, v[3].len))
+		{
+			show_n_free(b,v, true);
+			ft_printf("FAILED\n");
+			return (-42);
+		}
+
+		show_n_free(b, v, true);
+		ft_printf("SUCCES\n");
+		
+		return (42);
+	}
+
 //	manual_init_u64_v(NULL, v);
 //	manual_init_1024_x2_prime(v, &p, &q);
 
@@ -76,8 +143,14 @@ int			op(char **argv)
 
 //		random
 		v[1].sign = 1;
+
+//		v[0].sign = v[2].sign = 1;
+
 		v[2] = is_g_v(0, v + 2) ? g_v[1] : v[2];
+//		ft_printf("IN expmod\n");
 		v[3] = v_expmod(v[0], v[1], v[2], true);
+//		ft_printf("OUT expmod\n");
+//		show_var(42, 1, NULL, v);
 	}
 	else if (!ft_strcmp("gcd", argv[2]))
 		v[3] = v_gcd(v[0], v[1]);

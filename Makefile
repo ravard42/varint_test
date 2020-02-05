@@ -14,17 +14,18 @@ SRC = src/main.c\
 		src/u64.c\
 		src/find_prime.c\
 		src/asn1_der.c\
+
 	
 OBJ = $(SRC:.c=.o)
 
 LIBFT_DIR = ../
 
-INCL = -I ${LIBFT_DIR}/include -I include
+INCL = -I ${LIBFT_DIR}/include -I ${LIBFT_DIR}/include/nnaumenk -I include
 LIB =  -lm -L ${LIBFT_DIR} -lft
 
 all : $(NAME)
 
-$(NAME) : ${LIBFT_DIR}/libft.a $(OBJ)
+$(NAME) : ${LIBFT_DIR}/libft.a $(OBJ) 
 		$(CC) -o $(NAME) $(OBJ) $(FLAGS) $(INCL) $(LIB)
 
 ${LIBFT_DIR}/libft.a :

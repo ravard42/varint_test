@@ -37,10 +37,10 @@ static bool	first_prime_composite(t_varint n)
 
 static t_varint		v_rand_a(t_varint n)
 {
-	V_TYPE				rand_a[n.len];
+	uint8_t				rand_a[n.len];
 	t_varint				a;
 
-	ft_rand(rand_a, n.len * V_LEN);
+	ft_rand(rand_a, n.len);
 	if (n.len == 1)
 		rand_a[0] = ft_range(rand_a[0], 2, n.x[0] - 1);
 	else
@@ -68,7 +68,7 @@ static int	miller_witness(t_varint n, t_varint s, t_varint d)
 	i = g_v[1];
 	while (v_cmp(&i, "-lt", &s, false))
 	{
-		v_print(&i, "i", -2, KYEL);
+//		v_print("i", &i);
 		r = v_expmod(r, g_v[2], n, false);
 		if (v_cmp(&r, "-eq", &n_min_1, false))
 			return (false);
@@ -101,7 +101,7 @@ bool			prob_prim_test(t_varint n)
 	return (true);
 }
 
-t_varint		find_prime(V_LEN_TYPE len, bool print_prime)
+t_varint		find_prime(int16_t len, bool print_prime)
 {
 	t_varint n;
 
@@ -110,7 +110,7 @@ t_varint		find_prime(V_LEN_TYPE len, bool print_prime)
 		return (g_v[3]);
 	n = v_rand(len, false);
 	n.x[0] += (n.x[0] % 2 == 0) ? 1 : 0;	
-	n.x[0] = (V_TYPE)ft_range(n.x[0], 3, V_SUP);
+	n.x[0] = (uint8_t)ft_range(n.x[0], 3, V_SUP);
 	while (!prob_prim_test(n))
 	{
 		n = v_rand(len, false);
@@ -131,7 +131,7 @@ t_varint		find_prime(V_LEN_TYPE len, bool print_prime)
 			ft_printf("%s%016lx\n%s", KGRN, n.x[0], KNRM);
 		}
 		else
-			ft_dprintf(2, "bad V_TYPE for printing\n");
+			ft_dprintf(2, "bad uint8_t for printing\n");
 	}
 	return (n);	
 }

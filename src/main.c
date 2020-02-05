@@ -54,12 +54,7 @@ int	main(int argc, char **argv)
 	if (!ft_strcmp("op", argv[1]) && argc == 4)
 		return (op(argv));
 	if (!ft_strcmp("verif_op", argv[1]) && argc == 4)
-	{
-		if (sizeof(V_TYPE) != 1
-			&& ft_dprintf(2, VERIF_U8_ERR, KRED, KNRM))
-			return (-1);
 		return (verif_op(argv));
-	}
 	if (!ft_strcmp("find_prime", argv[1]) && argc == 3)
 		find_prime(atoi(argv[2]), true);
 	if (!ft_strcmp("asn1_der", argv[1])) {
