@@ -34,14 +34,9 @@
 int			verif_op(char **argv)
 {
 
-	t_u64			u64[5] = {g_u64_0};
-	t_varint	 	v[5] = {g_v[0]};
+	t_u64			u64[5] = {[0 ... 4] = g_u64_0};
+	t_varint	 	v[5] = {[0 ... 4 ] = g_v[0]};
 	t_varint		p, q;
-
-	for (int i = 0; i < 5; i++) {
-		u64[i] = g_u64_0;
-		v[i] = g_v[0];
-	}
 
 	
 //	ft_dprintf(2, "%sIN : VERIF_OP\n%s", KWHT, KNRM);
@@ -50,6 +45,14 @@ int			verif_op(char **argv)
 		return (-42);	
 //	show_var(-42, 0, u64, v);
 //	manual_init_u64_v(u64, v);
+
+//	v[0].sign = v[1].sign = v[2].sign = 1;
+//	u64[0].sign = u64[1].sign = u64[2].sign = 1;
+//	v[0].len = v[1].len = 5;
+//	v[2].len = 1;
+//	*((uint64_t *)v[0].x) = u64[0].x = 0x72c5b611479e;
+//	*((uint64_t *)v[1].x) = u64[1].x = 0xd6b866cc8a00;
+//	*((uint64_t *)v[2].x) = u64[2].x = 0x0;
 
 	/*
 	**	CMP TESTS
@@ -186,6 +189,7 @@ int			verif_op(char **argv)
 	else	
 		ret = verify(argv[2], u64, v) ? 42 : -42;
 
+//	show_var(ret, 1, u64, v);
 
 //	if (ret == -42) {
 //		show_var(ret, 1, u64, v);
