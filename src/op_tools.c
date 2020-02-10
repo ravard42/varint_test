@@ -42,15 +42,40 @@ void			show_var(int state, int res, t_u64 *u, t_varint *v)
 	ft_printf("\n%s<--------------SHOW_VAR OUT-------------->%s\n", KYEL, KNRM);
 }
 
-bool			rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv)
+/*
+**	options on one_byte:
+** 	bit | option
+**     0  | 2nd operand not 0
+**     1  | only_pos
+**     2  | operand sorted (regarding sign)
+**
+** example: only_pos and sorted --> opt = 5 (00000110)
+*/
+
+bool			rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv, uint8_t opt)
 {
+// VARINT RANDOM INITIALISATION
 	for (int i = 0; i < 3; i++)
 	{
 		v[i] = v_rand(atoi(argv[3]), true);
 		if (is_g_v(3, v + i))
 			return (false);
-		if (u64)
-		{
+	}
+// HANDLE OPT
+	// avoid divison by 0
+	if ((opt & 1) && is_g_v(0, v + 1))
+		v[1] = g_v[1];
+	// ONLY POS NUMBER
+	if (opt & 2) {
+		for (int i = 0; i < 3; i++)
+			v[i].sign = 1;
+	}
+	// SORT IT
+	if (opt & 4)
+		v_sort(v, v + 1, NULL, false);
+// INIT U64
+	if (u64) {
+		for (int i = 0; i < 3; i++) {
 			u64[i].sign = v[i].sign;
 			for (int j = 0; j < atoi(argv[3]); j++)
 				u64[i].x += (uint64_t)v[i].x[j] << 8 * j;
@@ -65,13 +90,29 @@ bool			rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv)
 
 bool				manual_init_u64_v(t_u64 *u64, t_varint *v)
 {
-	(void)u64;
-	(void)v;
 	// init manually here
+
+	v[0].sign = 1;
+	v[1].sign = 1;
+	v[0].len = v[1].len = 8;
+	uint64_t buff = 0x491ab7c04c953991;
+	ft_memcpy((char *)v[0].x, (char *)&buff, 8);
+	buff = 0x1d5fbbe7c2934e36;
+	ft_memcpy((char *)v[1].x, (char *)&buff, 8);
+
+
+
+	if (u64) {
+		for (int i = 0; i < 3; i++) {
+			u64[i].sign = v[i].sign;
+			for (int j = 0; j < 8; j++)
+				u64[i].x += (uint64_t)v[i].x[j] << 8 * j;
+		}
+	}
 	return true;
 }
 
-// beware that dst got enough memorie space to store nb_v varint
+// beware that dest got enough memorie space to store nb_v varint
 
 t_varint			*asn1_der_init(t_varint *dest, char *der_file)
 {
@@ -124,14 +165,8 @@ bool			verify(char *op, t_u64 *u64, t_varint *v)
 
 static bool	init_nnaumenk(t_bigint *b, t_varint *v)
 {
-	if (is_g_v(0, v + 1))
-		v[1] = g_v[1];
-
 	for (int i = 0; i < 3; i++)
 	{
-	// ONLY POS NUMBER
-		v[i].sign = 1;
-	//
 		b[i].size = v[i].len;
 		b[i].value = (unsigned char *)malloc(sizeof(unsigned char) * v[i].len);
 		ft_memcpy(b[i].value, v[i].x, v[i].len);
@@ -140,65 +175,167 @@ static bool	init_nnaumenk(t_bigint *b, t_varint *v)
 			&& nnaumenk_show_n_free(b, v, false, true))
 			return (false);
 	}
+	//nnaumenk_show_n_free(b, v, true, false);
 	return (true);
 }
 
-#define NB_TEST 420
-static void	add_x1000(t_bigint *b, t_varint *v)
+#define NB_TEST 100
+static void	NB_TEST_add(t_bigint *b, t_varint *v)
 {
 	clock_t	start;
-	double t[2] = {0};
+	double 	t[2] = {0};
+	t_bigint	b0_save;
 
-	b[3] = ft_bigint_dup(b);
 
 	for (int i = 0; i < NB_TEST; i++)
 	{
+		b0_save = ft_bigint_dup(b);
 		start = clock();
-		ft_bigint_add(b, b + 1);
+		ft_bigint_add(&b0_save, b + 1);
 		t[0] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
 		if (i != NB_TEST - 1)
-		{
-			free(b[0].value);
-			b[0] = ft_bigint_dup(b + 3);
-		}
+			free(b0_save.value);
+		else
+			b[3] = b0_save;
+		
 		start = clock();
 		v[3] = v_add(v[0], v[1], true);
 		t[1] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
 	}
-	printf("add_x1000 nnaumenk compute time : %fms\n", t[0] / NB_TEST);		
-	printf("add_x1000 ravard compute time : %fms\n", t[1] / NB_TEST);		
+	printf("%d_add nnaumenk --> average compute time by op : %fms\n", NB_TEST, t[0] / NB_TEST);		
+	printf("%d_add ravard --> average compute time by op : %fms\n", NB_TEST, t[1] / NB_TEST);		
 }
 
-bool	verif_nnaumenk_ravard(t_bigint *b, t_varint *v)
+static void	NB_TEST_sub(t_bigint *b, t_varint *v)
+{
+	clock_t	start;
+	double 	t[2] = {0};
+	t_bigint	b0_save;
+
+	for (int i = 0; i < NB_TEST; i++)
+	{
+		b0_save = ft_bigint_dup(b);
+		start = clock();
+		ft_bigint_sub(&b0_save, b + 1);
+		t[0] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
+		if (i != NB_TEST - 1)
+			free(b0_save.value);
+		else
+			b[3] = b0_save;
+		
+		start = clock();
+		v[3] = v_sub(v[0], v[1], true);
+		t[1] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
+	}
+	printf("%d_sub nnaumenk --> average compute time by op : %fms\n", NB_TEST, t[0] / NB_TEST);		
+	printf("%d_sub ravard --> average compute time by op : %fms\n", NB_TEST, t[1] / NB_TEST);		
+}
+
+static void	NB_TEST_mul(t_bigint *b, t_varint *v)
+{
+	clock_t	start;
+	double 	t[2] = {0};
+
+
+	for (int i = 0; i < NB_TEST; i++)
+	{
+		start = clock();
+		ft_bigint_mul(b + 3, b, b + 1);
+		t[0] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
+		if (i != NB_TEST - 1)
+			free(b[3].value);
+		
+		start = clock();
+		v[3] = v_mul(v[0], v[1], true);
+		t[1] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
+	}
+	printf("%d_mul nnaumenk --> average compute time by op : %fms\n", NB_TEST, t[0] / NB_TEST);		
+	printf("%d_mul ravard --> average compute time by op : %fms\n", NB_TEST, t[1] / NB_TEST);		
+}
+
+static void	NB_TEST_div(t_bigint *b, t_varint *v)
+{
+	clock_t	start;
+	double 	t[2] = {0};
+
+
+	for (int i = 0; i < NB_TEST; i++)
+	{
+		start = clock();
+		ft_bigint_div(b + 3, b + 4, b, b + 1);		
+		t[0] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
+		if (i != NB_TEST - 1) {
+			free(b[3].value);
+			free(b[4].value);
+		}
+		
+		start = clock();
+		v[3] = v_div(v[0], v[1], true);
+		t[1] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
+	}
+	printf("%d_div nnaumenk --> average compute time by op : %fms\n", NB_TEST, t[0] / NB_TEST);		
+	printf("%d_div ravard --> average compute time by op : %fms\n", NB_TEST, t[1] / NB_TEST);		
+}
+
+static void	NB_TEST_mod(t_bigint *b, t_varint *v)
+{
+	clock_t	start;
+	double 	t[2] = {0};
+
+
+	for (int i = 0; i < NB_TEST; i++)
+	{
+		start = clock();
+		ft_bigint_div(b + 4, b + 3, b, b + 1);		
+		t[0] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
+		if (i != NB_TEST - 1) {
+			free(b[3].value);
+			free(b[4].value);
+		}
+		start = clock();
+		v[3] = v_mod(v[0], v[1], true, true);
+		t[1] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
+	}
+	printf("%d_mod nnaumenk --> average compute time by op : %fms\n", NB_TEST, t[0] / NB_TEST);		
+	printf("%d_mod ravard --> average compute time by op : %fms\n", NB_TEST, t[1] / NB_TEST);		
+}
+
+static int	verif_nnaumenk_ravard(t_bigint *b, t_varint *v)
 {
 	int	ret;
 
-	if (is_g_v(0, v + 4))
-		ret = ft_memcmp(b[3].value, v[3].x, v[3].len) ? -42 : 42;
+//	for (int i = 0; i < v[3].len; i++)
+//		 ft_printf("(i, cmp) = (%d, %d)\n", i, ft_memcmp(b[3].value + i , &v[3].x[i], 1));
+
+	if (b[3].size != (size_t)v[3].len)
+		ret = -42;
 	else
-		ret = (ft_memcmp(b[4].value, v[4].x, v[4].len)
-			|| ft_memcmp(b[3].value, v[3].x, v[3].len)) ? -42 : 42;
+		ret = ft_memcmp(b[3].value, v[3].x, v[3].len) ? -42 : 42;
 	//PRINT
 	nnaumenk_show_n_free(b,v, false, true);
-	ft_printf("signs = (%d, %d)\n\n", v[0].sign, v[1].sign);
+//	ft_printf("signs = (%d, %d)\n\n", v[0].sign, v[1].sign);
 	return (ret);
 }
 
-int	nnaumenk_speed_cmp(t_varint *v)
+int	nnaumenk_speed_cmp(t_varint *v, char *op)
 {
 	t_bigint b[5] = {[0 ... 4] = {NULL, 0}};
 
 	if (!init_nnaumenk(b, v))
 		return (-42);
 
+//	v_asn1_der_int_seq_e("mul_debug.der", v, 2);
 
-	add_x1000(b, v);
-
-//	ft_bigint_mul(b + 3, b, b + 1);
-//	v[3] = v_mul(v[0], v[1], true);
-//	ft_bigint_div(b + 4, b + 3, b, b + 1);		
-//	v[4] = v_div(v[0], v[1], true);
-//	v[3] = v_mod(v[0], v[1], true, true);
+	if (!ft_strcmp("add", op))
+		NB_TEST_add(b, v);
+	else if (!ft_strcmp("sub", op))
+		NB_TEST_sub(b, v);
+	else if (!ft_strcmp("mul", op))
+	  	NB_TEST_mul(b, v);
+	else if (!ft_strcmp("div", op))
+	  	NB_TEST_div(b, v);
+	else if (!ft_strcmp("mod", op))
+	  	NB_TEST_mod(b, v);
 
 	return (verif_nnaumenk_ravard(b, v));
 }

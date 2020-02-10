@@ -114,3 +114,20 @@ echo -e "${COL}${OK}/$4${KNRM}"
 rm rand_key.pem rand_key.der key.der
 
 fi
+
+if [[ $1 == "op" && $2 == "nnaumenk_speed_cmp" ]] && (($# == 4));then
+# $3 : numb of uint8_t 
+# $4 : op to process
+
+echo -e "${KBLU}NNAUMENK_SPEED_CMP_START${KNRM}\n"
+
+./varint_test op nnaumenk_speed_cmp $3 $4
+
+if (($? == 42)); then
+echo -e "${KGRN}OK${KNRM}"
+else
+echo -e "${KRED}KO${KNRM}"
+fi
+
+
+fi

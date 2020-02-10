@@ -39,12 +39,12 @@ int			verif_op(char **argv)
 	t_varint		p, q;
 
 	
-//	ft_dprintf(2, "%sIN : VERIF_OP\n%s", KWHT, KNRM);
-	if (!rand_init_u64_v(u64, v, argv)
+//	ft_dprintf(2, "\n%sIN : VERIF_OP\n%s", KWHT, KNRM);
+	if (!rand_init_u64_v(u64, v, argv, 0)
 		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
 		return (-42);	
-//	show_var(-42, 0, u64, v);
 //	manual_init_u64_v(u64, v);
+//	show_var(0, 0, u64, v);
 
 //	v[0].sign = v[1].sign = v[2].sign = 1;
 //	u64[0].sign = u64[1].sign = u64[2].sign = 1;

@@ -37,12 +37,14 @@ int			op(char **argv)
 	t_varint	 	v[5] = { [0 ... 4]  = g_v[0]};
 
 //	ft_dprintf(2, "%sIN : SPEED_OP\n%s", KWHT, KNRM);
-//	for (int i = 0; i < 5; i++)
-//		v[i] = g_v[0];
 
-	if (!rand_init_u64_v(NULL, v, argv)
+	if (!rand_init_u64_v(NULL, v, argv, 6)
 		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
 		return (-42);
+
+//	asn1_der_init(v, "der_files/mul_debug.der");
+//	asn1_der_init(v, "der_files/ret.der");
+//	asn1_der_init(v + 1, "der_files/p_mul.der");
 
 //	manual_init_u64_v(NULL, v);
 
@@ -112,14 +114,14 @@ int			op(char **argv)
 		v_eea(v + 3, v[0], v[1]);
 	}
 	else if (!ft_strcmp("nnaumenk_speed_cmp", argv[2]))
-		return (nnaumenk_speed_cmp(v));
+		return (nnaumenk_speed_cmp(v, argv[4]));
 	else
 	{
 		ft_dprintf(2, "%s'%s' : unknown operator%s\n", KRED, argv[2], KNRM);
 		return (-42);
 	}
 	int ret = (is_g_v(3, v + 3) || is_g_v(3, v + 4)) ? -42 : 42;
-//	show_var(ret, 1, NULL, v);
+	show_var(ret, 1, NULL, v);
 
 //	ft_dprintf(2, "%sOUT SPEED_OP\n%s", KWHT, KNRM);
 	return (ret);
