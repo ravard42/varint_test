@@ -4,8 +4,7 @@
 **	Here we run varint operators on randomely choose varint variables,
 **	then we can test the rapidity of our operators (time sh varint_test.sh op [...])
 **	or test overflow errors, checking the return value of our operator.
-**	We can test operators on manual input settings too with manual_init_u64_v func
-**	or compare the v_expmod and v_crt with manual_init_1024_x2_prime_test.
+**	We can test operators on manual input settings too with manual_init_u64_v func or load asn1 der integer sequence previously encoded. (v_asn1_der_int_seq_e|d)
 **
 **	len = atoi(argv[3]) has no limitation here 
 **	(juste the adjustement of V_MAX_LEN in varint.h to avoid overflows)
@@ -41,10 +40,6 @@ int			op(char **argv)
 	if (!rand_init_u64_v(NULL, v, argv, 6)
 		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
 		return (-42);
-
-//	asn1_der_init(v, "der_files/mul_debug.der");
-//	asn1_der_init(v, "der_files/ret.der");
-//	asn1_der_init(v + 1, "der_files/p_mul.der");
 
 //	manual_init_u64_v(NULL, v);
 
@@ -113,8 +108,6 @@ int			op(char **argv)
 		v[0].sign = v[1].sign = 1;
 		v_eea(v + 3, v[0], v[1]);
 	}
-	else if (!ft_strcmp("nnaumenk_speed_cmp", argv[2]))
-		return (nnaumenk_speed_cmp(v, argv[4]));
 	else
 	{
 		ft_dprintf(2, "%s'%s' : unknown operator%s\n", KRED, argv[2], KNRM);

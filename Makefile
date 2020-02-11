@@ -10,7 +10,8 @@ FLAGS = -Wall -Wextra -fsanitize=address -g
 SRC = src/main.c\
 		src/op_tools.c\
 		src/op.c\
-		src/verif_op.c\
+		src/u64_cmp.c\
+		src/nnaumenk_cmp.c\
 		src/u64.c\
 		src/find_prime.c\
 		src/asn1_der.c\

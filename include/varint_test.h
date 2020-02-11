@@ -14,12 +14,10 @@ void			show_var(int state, int res, t_u64 *u, t_varint *v);
 bool			rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv, uint8_t opt);
 bool			manual_init_u64_v(t_u64 *u64, t_varint *v);
 t_varint		*asn1_der_init(t_varint *dest, char *der_file);
-bool			verify(char *op, t_u64 *u64, t_varint *v);
-
 int			op(char **argv);
-int			nnaumenk_speed_cmp(t_varint *v, char *op);
-bool			nnaumenk_show_n_free(t_bigint *b, t_varint *v, bool show, bool free);
-int			verif_op(char **argv);
+bool			verify(char *op, t_u64 *u64, t_varint *v);
+int			u64_cmp(char **argv);
+int			nnaumenk_cmp(char **argv);
 t_varint	find_prime(int16_t len, bool print_prime);
 int			basic_asn1_der_test(char *f_der);
 int			rsa_asn1_der_test(char *in_der, char *out_der);

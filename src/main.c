@@ -3,7 +3,7 @@
 
 static void			type_usage( void )
 {
-	static char		*type[] = {"verif_op", "speed_op", "find_prime", "asn1_der_int_seq"};
+	static char		*type[] = {"op", "u64_cmp", "nnaumenk_cmp", "find_prime", "asn1_der"};
 
 	for (int i = 0; i < 4; i++)
 		ft_printf("\n%s%s%s:\n", KBLU, type[i], KNRM);
@@ -40,27 +40,22 @@ int			usage(void)
 	return (-1);
 }
 
-# define TOTO 2
-
-typedef struct  s_test
-{
-	int			i[TOTO];
-}				t_test;
-
 int	main(int argc, char **argv)
 {
 	if (argc == 1)
 		return (usage());
-	if (!ft_strcmp("op", argv[1]) && argc >= 4)
+	else if (!ft_strcmp("op", argv[1]) && argc == 4)
 		return (op(argv));
-	if (!ft_strcmp("verif_op", argv[1]) && argc == 4)
-		return (verif_op(argv));
-	if (!ft_strcmp("find_prime", argv[1]) && argc == 3)
+	else if (!ft_strcmp("u64_cmp", argv[1]) && argc == 4)
+		return (u64_cmp(argv));
+	else if (!ft_strcmp("nnaumenk_cmp", argv[1]) && argc == 4)
+		return (nnaumenk_cmp(argv));
+	else if (!ft_strcmp("find_prime", argv[1]) && argc == 3)
 		find_prime(atoi(argv[2]), true);
-	if (!ft_strcmp("asn1_der", argv[1])) {
+	else if (!ft_strcmp("asn1_der", argv[1])) {
 		if (!ft_strcmp("basic", argv[2]) && argc == 4)
 			return(basic_asn1_der_test(argv[3]));
-		if (!ft_strcmp("rsa", argv[2]) && argc == 5)
+		else if (!ft_strcmp("rsa", argv[2]) && argc == 5)
 			return (rsa_asn1_der_test(argv[3], argv[4]));
 	}
 	return (0);

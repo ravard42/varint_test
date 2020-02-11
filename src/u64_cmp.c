@@ -31,7 +31,7 @@
 **	 	4			2nd res (for eea)
 */
 
-int			verif_op(char **argv)
+int			u64_cmp(char **argv)
 {
 
 	t_u64			u64[5] = {[0 ... 4] = g_u64_0};

@@ -10,11 +10,11 @@ KCYN="\x1B[36;1m"
 KWHT="\x1B[37;1m"
 
 # $1 : type of the test
-# "speed_op" | "verif_op" | "find_prime" | "asn1_der"
+# "op" | "u64_cmp" | "nnaumenk_cmp" | "find_prime" | "asn1_der"
 
 #-----OP TESTS-----
 
-if [[ $1 == "op" || $1 == "verif_op" ]] && (($# == 4));then
+if [[ $1 == "op" || $1 == "u64_cmp" || $1 == "nnaumenk_cmp" ]] && (($# == 4));then
 # $2 : op to process
 # $3 : numb of uint8_t 
 # $4 : numb of test
@@ -23,9 +23,12 @@ if [[ $1 == "op" || $1 == "verif_op" ]] && (($# == 4));then
 if [[ $1 == "op" ]];then
 COL=$KYEL
 echo -e "${KBLU}OP TEST START${KNRM}\n"
+elif [[ $1 == "u64_cmp" ]];then
+COL=$KGRN
+echo -e "${KBLU}U64_CMP TEST START${KNRM}\n"
 else
 COL=$KGRN
-echo -e "${KBLU}VERIF_OP TEST START${KNRM}\n"
+echo -e "${KBLU}NNAUMENK_CMP TEST START\n\nAverage compute-time by op on 100 identical tests${KNRM}\n"
 fi
 
 OK=0
@@ -112,22 +115,5 @@ COL=$KGRN
 fi
 echo -e "${COL}${OK}/$4${KNRM}"
 rm rand_key.pem rand_key.der key.der
-
-fi
-
-if [[ $1 == "op" && $2 == "nnaumenk_speed_cmp" ]] && (($# == 4));then
-# $3 : numb of uint8_t 
-# $4 : op to process
-
-echo -e "${KBLU}NNAUMENK_SPEED_CMP_START${KNRM}\n"
-
-./varint_test op nnaumenk_speed_cmp $3 $4
-
-if (($? == 42)); then
-echo -e "${KGRN}OK${KNRM}"
-else
-echo -e "${KRED}KO${KNRM}"
-fi
-
 
 fi
