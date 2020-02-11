@@ -69,7 +69,7 @@ static void	NB_TEST_add(t_bigint *b, t_varint *v)
 		v[3] = v_add(v[0], v[1], true);
 		t[1] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
 	}
-	printf("nnaumenk : %fms        ravard: %fms\n", t[0] / NB_TEST, t[1] / NB_TEST);		
+	printf("nnaumenk : %f ms        ravard: %f ms\n", t[0] / NB_TEST, t[1] / NB_TEST);		
 }
 
 static void	NB_TEST_sub(t_bigint *b, t_varint *v)
@@ -93,8 +93,7 @@ static void	NB_TEST_sub(t_bigint *b, t_varint *v)
 		v[3] = v_sub(v[0], v[1], true);
 		t[1] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
 	}
-	printf("%d_sub nnaumenk --> average compute time by op : %fms\n", NB_TEST, t[0] / NB_TEST);		
-	printf("%d_sub ravard --> average compute time by op : %fms\n", NB_TEST, t[1] / NB_TEST);		
+	printf("nnaumenk : %f ms        ravard: %f ms\n", t[0] / NB_TEST, t[1] / NB_TEST);		
 }
 
 static void	NB_TEST_mul(t_bigint *b, t_varint *v)
@@ -115,8 +114,7 @@ static void	NB_TEST_mul(t_bigint *b, t_varint *v)
 		v[3] = v_mul(v[0], v[1], true);
 		t[1] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
 	}
-	printf("%d_mul nnaumenk --> average compute time by op : %fms\n", NB_TEST, t[0] / NB_TEST);		
-	printf("%d_mul ravard --> average compute time by op : %fms\n", NB_TEST, t[1] / NB_TEST);		
+	printf("nnaumenk : %f ms        ravard: %f ms\n", t[0] / NB_TEST, t[1] / NB_TEST);		
 }
 
 static void	NB_TEST_div(t_bigint *b, t_varint *v)
@@ -139,8 +137,7 @@ static void	NB_TEST_div(t_bigint *b, t_varint *v)
 		v[3] = v_div(v[0], v[1], true);
 		t[1] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
 	}
-	printf("%d_div nnaumenk --> average compute time by op : %fms\n", NB_TEST, t[0] / NB_TEST);		
-	printf("%d_div ravard --> average compute time by op : %fms\n", NB_TEST, t[1] / NB_TEST);		
+	printf("nnaumenk : %f ms        ravard: %f ms\n", t[0] / NB_TEST, t[1] / NB_TEST);		
 }
 
 static void	NB_TEST_mod(t_bigint *b, t_varint *v)
@@ -162,7 +159,7 @@ static void	NB_TEST_mod(t_bigint *b, t_varint *v)
 		v[3] = v_mod(v[0], v[1], true, true);
 		t[1] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
 	}
-	printf("average compute time by op -> nnaumenk : %fms        ravard: %fms\n", t[0] / NB_TEST, t[1] / NB_TEST);		
+	printf("nnaumenk : %f ms        ravard: %f ms\n", t[0] / NB_TEST, t[1] / NB_TEST);		
 }
 
 static int	verif_nnaumenk_ravard(t_bigint *b, t_varint *v)
