@@ -6,4 +6,5 @@ BEGIN {nna = 0; rav = 0; n = 0}
 /ms/ {nna += $3; rav += $6; n += 1}
 END {	print "nnaumenk: ", nna / n, " ms";
 		print "ravard:   ", rav / n, " ms";
+		print "ratio:    ", nna / rav;
 }
