@@ -48,8 +48,8 @@ int	main(int argc, char **argv)
 		return (op(argv));
 	else if (!ft_strcmp("u64_cmp", argv[1]) && argc == 4)
 		return (u64_cmp(argv));
-	else if (!ft_strcmp("nnaumenk_cmp", argv[1]) && argc == 4)
-		return (nnaumenk_cmp(argv));
+//	else if (!ft_strcmp("nnaumenk_cmp", argv[1]) && argc == 4)
+//		return (nnaumenk_cmp(argv));
 	else if (!ft_strcmp("find_prime", argv[1]) && argc == 3)
 		find_prime(atoi(argv[2]), true);
 	else if (!ft_strcmp("asn1_der", argv[1])) {

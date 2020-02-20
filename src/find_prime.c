@@ -15,11 +15,8 @@ static bool	first_prime_composite(t_varint n)
 	{
 		p = g_v[0];
 		p.x[0] = g_prime[i];
-		if (V_SUP == 0xff && V_MAX_LEN > 1)
-		{
-			p.x[1] = *((uint8_t *)(g_prime + i) + 1);
-			p.len = (p.x[1]) ? 2 : 1;
-		}
+		p.x[1] = *((uint8_t *)(g_prime + i) + 1);
+		p.len = (p.x[1]) ? 2 : 1;
 		if (v_cmp(&n, "-eq", &p, false))
 			return (false);
 		lvalue_required = v_mod(n, p, true, false);
@@ -45,7 +42,7 @@ static t_varint		v_rand_a(t_varint n)
 		rand_a[0] = ft_range(rand_a[0], 2, n.x[0] - 1);
 	else
 	{
-		rand_a[0] = ft_range(rand_a[0], 2, V_SUP);
+		rand_a[0] = ft_range(rand_a[0], 2, 0xff);
 		rand_a[n.len - 1] = ft_range(rand_a[n.len - 1], 0, n.x[n.len - 1] - 1);
 	}
 	a = v_init(1, rand_a, n.len);
@@ -110,7 +107,7 @@ t_varint		find_prime(int16_t len, bool print_prime)
 		return (g_v[3]);
 	n = v_rand(len, false);
 	n.x[0] += (n.x[0] % 2 == 0) ? 1 : 0;	
-	n.x[0] = (uint8_t)ft_range(n.x[0], 3, V_SUP);
+	n.x[0] = (uint8_t)ft_range(n.x[0], 3, 0xff);
 	while (!prob_prim_test(n))
 	{
 		n = v_rand(len, false);
