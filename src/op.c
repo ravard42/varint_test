@@ -37,10 +37,11 @@ int			op(char **argv)
 
 //	ft_dprintf(2, "%sIN : SPEED_OP\n%s", KWHT, KNRM);
 
+
 	if (!rand_init_u64_v(NULL, v, argv, 6)
 		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
 		return (-42);
-
+	
 //	manual_init_u64_v(NULL, v);
 
 	if (!ft_strcmp("cmp_lt", argv[2]))
@@ -55,8 +56,8 @@ int			op(char **argv)
 		v[3] = v_mul(v[0], v[1], true);
 	else if (!ft_strcmp("exp", argv[2])) {
 		v[1].sign = 1;
-//		v[0].x[0] %= 17;	
-//		v[1].x[0] %= 17;
+//		v[0].x[0] %= 16;	
+//		v[1].x[0] %= 16;
 		v[3] = v_exp(v[0], v[1]);
 	}
 	else if (!ft_strcmp("div", argv[2])) {

@@ -28,7 +28,7 @@ COL=$KGRN
 echo -e "${KBLU}U64_CMP TEST START${KNRM}\n"
 else
 COL=$KGRN
-echo -e "${KBLU}NNAUMENK_CMP TEST START\n\nAverage compute-time by op on 100 identical tests${KNRM}\n"
+echo -e "${KBLU}NNAUMENK_CMP TEST START\n\nAverage compute-time by op on $4 random $2 ${KNRM}\n"
 fi
 
 OK=0

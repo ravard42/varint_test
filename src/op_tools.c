@@ -49,7 +49,7 @@ void			show_var(int state, int res, t_u64 *u, t_varint *v)
 **     1  | only_pos
 **     2  | operand sorted (regarding sign)
 **
-** example: only_pos and sorted --> opt = 5 (00000110)
+** example: only_pos and sorted --> opt = 6 (00000110)
 */
 
 bool			rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv, uint8_t opt)
@@ -94,11 +94,12 @@ bool				manual_init_u64_v(t_u64 *u64, t_varint *v)
 
 	v[0].sign = 1;
 	v[1].sign = 1;
-	v[0].len = v[1].len = 8;
-	uint64_t buff = 0x491ab7c04c953991;
-	ft_memcpy((char *)v[0].x, (char *)&buff, 8);
-	buff = 0x1d5fbbe7c2934e36;
-	ft_memcpy((char *)v[1].x, (char *)&buff, 8);
+	uint64_t buff = 0x50cefe0;
+	ft_memcpy((char *)v[0].x, (char *)&buff, 4);
+	v[0].len = 4;
+	buff = 0xd9376b;
+	ft_memcpy((char *)v[1].x, (char *)&buff, 3);
+	v[1].len = 3;
 
 
 

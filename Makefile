@@ -2,10 +2,8 @@ CC = gcc
 #CC = clang
 NAME = varint_test
 
-#FLAGS = -Wall -Wextra -Ofast
-#FLAGS = -Wall -Wextra
-#FLAGS = -Wall -Wextra -ggdb -fsanitize=address
-FLAGS = -Wall -Wextra -fsanitize=address -g
+FLAGS = -Wall -Wextra -O2
+#FLAGS = -Wall -Wextra -fsanitize=address -g
 
 SRC = src/main.c\
 		src/op_tools.c\

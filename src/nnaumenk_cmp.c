@@ -6,8 +6,6 @@
 **
 */
 
-#define NB_TEST 100
-
 bool			nnaumenk_show_n_free(t_bigint *b, t_varint *v, bool show, bool freee)
 {
 	char		name[3] = {'b', '0', 0};
@@ -47,119 +45,92 @@ static bool	init_nnaumenk(t_bigint *b, t_varint *v)
 	return (true);
 }
 
-static void	NB_TEST_add(t_bigint *b, t_varint *v)
+static void	add_cmp(t_bigint *b, t_varint *v)
 {
-	clock_t	start;
-	double 	t[2] = {0};
-	t_bigint	b0_save;
+	clock_t	clck[2];
 
-
-	for (int i = 0; i < NB_TEST; i++)
-	{
-		b0_save = ft_bigint_dup(b);
-		start = clock();
-		ft_bigint_add(&b0_save, b + 1);
-		t[0] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
-		if (i != NB_TEST - 1)
-			free(b0_save.value);
-		else
-			b[3] = b0_save;
+	t_bigint b3 = ft_bigint_dup(b);
+	clck[0] = clock();
+	ft_bigint_add(&b3, b + 1);
+	clck[0] = clock() - clck[0];
+	b[3] = b3;
 		
-		start = clock();
-		v[3] = v_add(v[0], v[1], true);
-		t[1] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
-	}
-	printf("nnaumenk : %f ms        ravard: %f ms\n", t[0] / NB_TEST, t[1] / NB_TEST);		
+	clck[1] = clock();
+	v[3] = v_add(v[0], v[1], true);
+	clck[1] = clock() - clck[1];
+	printf("%snnaumenk : ( %zu , %f)\travard : ( %zu , %f) NNAUMENK_CMP_AWK_FILTER %s\n", KYEL, clck[0], (double)clck[0] / CLOCKS_PER_SEC, clck[1], (double)clck[1] / CLOCKS_PER_SEC, KNRM);
 }
 
-static void	NB_TEST_sub(t_bigint *b, t_varint *v)
+static void	sub_cmp(t_bigint *b, t_varint *v)
 {
-	clock_t	start;
-	double 	t[2] = {0};
-	t_bigint	b0_save;
+	clock_t	clck[2];
 
-	for (int i = 0; i < NB_TEST; i++)
-	{
-		b0_save = ft_bigint_dup(b);
-		start = clock();
-		ft_bigint_sub(&b0_save, b + 1);
-		t[0] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
-		if (i != NB_TEST - 1)
-			free(b0_save.value);
-		else
-			b[3] = b0_save;
+	t_bigint b3 = ft_bigint_dup(b);
+	clck[0] = clock();
+	ft_bigint_sub(&b3, b + 1);
+	clck[0] = clock() - clck[0];
+	b[3] = b3;
 		
-		start = clock();
-		v[3] = v_sub(v[0], v[1], true);
-		t[1] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
-	}
-	printf("nnaumenk : %f ms        ravard: %f ms\n", t[0] / NB_TEST, t[1] / NB_TEST);		
+	clck[1] = clock();
+	v[3] = v_sub(v[0], v[1], true);
+	clck[1] = clock() - clck[1];
+	printf("%snnaumenk : ( %zu , %f)\travard : ( %zu , %f) NNAUMENK_CMP_AWK_FILTER %s\n", KYEL, clck[0], (double)clck[0] / CLOCKS_PER_SEC, clck[1], (double)clck[1] / CLOCKS_PER_SEC, KNRM);
 }
 
-static void	NB_TEST_mul(t_bigint *b, t_varint *v)
+static void	mul_cmp(t_bigint *b, t_varint *v)
 {
-	clock_t	start;
-	double 	t[2] = {0};
+	clock_t	clck[2];
 
-
-	for (int i = 0; i < NB_TEST; i++)
-	{
-		start = clock();
-		ft_bigint_mul(b + 3, b, b + 1);
-		t[0] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
-		if (i != NB_TEST - 1)
-			free(b[3].value);
+	clck[0] = clock();
+	ft_bigint_mul(b + 3, b, b + 1);
+	clck[0] = clock() - clck[0];
 		
-		start = clock();
-		v[3] = v_mul(v[0], v[1], true);
-		t[1] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
-	}
-	printf("nnaumenk : %f ms        ravard: %f ms\n", t[0] / NB_TEST, t[1] / NB_TEST);		
+	clck[1] = clock();
+	v[3] = v_mul(v[0], v[1], true);
+	clck[1] = clock() - clck[1];
+	printf("%snnaumenk : ( %zu , %f)\travard : ( %zu , %f) NNAUMENK_CMP_AWK_FILTER %s\n", KYEL, clck[0], (double)clck[0] / CLOCKS_PER_SEC, clck[1], (double)clck[1] / CLOCKS_PER_SEC, KNRM);
 }
 
-static void	NB_TEST_div(t_bigint *b, t_varint *v)
+static void	div_cmp(t_bigint *b, t_varint *v)
 {
-	clock_t	start;
-	double 	t[2] = {0};
+	clock_t	clck[2];
 
-
-	for (int i = 0; i < NB_TEST; i++)
-	{
-		start = clock();
-		ft_bigint_div(b + 3, b + 4, b, b + 1);		
-		t[0] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
-		if (i != NB_TEST - 1) {
-			free(b[3].value);
-			free(b[4].value);
-		}
+	clck[0] = clock();
+	ft_bigint_div(b + 3, b + 4, b, b + 1);
+	clck[0] = clock() - clck[0];
 		
-		start = clock();
-		v[3] = v_div(v[0], v[1], true);
-		t[1] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
-	}
-	printf("nnaumenk : %f ms        ravard: %f ms\n", t[0] / NB_TEST, t[1] / NB_TEST);		
+	clck[1] = clock();
+	v[3] = v_div(v[0], v[1], true);
+	clck[1] = clock() - clck[1];
+	printf("%snnaumenk : ( %zu , %f)\travard : ( %zu , %f) NNAUMENK_CMP_AWK_FILTER %s\n", KYEL, clck[0], (double)clck[0] / CLOCKS_PER_SEC, clck[1], (double)clck[1] / CLOCKS_PER_SEC, KNRM);
 }
 
-static void	NB_TEST_mod(t_bigint *b, t_varint *v)
+static void	mod_cmp(t_bigint *b, t_varint *v)
 {
-	clock_t	start;
-	double 	t[2] = {0};
+	clock_t	clck[2];
 
+	clck[0] = clock();
+	ft_bigint_div(b + 4, b + 3, b, b + 1);
+	clck[0] = clock() - clck[0];
+		
+	clck[1] = clock();
+	v[3] = v_mod(v[0], v[1], true, true);
+	clck[1] = clock() - clck[1];
+	printf("%snnaumenk : ( %zu , %f)\travard : ( %zu , %f) NNAUMENK_CMP_AWK_FILTER %s\n", KYEL, clck[0], (double)clck[0] / CLOCKS_PER_SEC, clck[1], (double)clck[1] / CLOCKS_PER_SEC, KNRM);
+}
 
-	for (int i = 0; i < NB_TEST; i++)
-	{
-		start = clock();
-		ft_bigint_div(b + 4, b + 3, b, b + 1);		
-		t[0] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
-		if (i != NB_TEST - 1) {
-			free(b[3].value);
-			free(b[4].value);
-		}
-		start = clock();
-		v[3] = v_mod(v[0], v[1], true, true);
-		t[1] += 1000 * (double)(clock() - start) / CLOCKS_PER_SEC;
-	}
-	printf("nnaumenk : %f ms        ravard: %f ms\n", t[0] / NB_TEST, t[1] / NB_TEST);		
+static void	expmod_cmp(t_bigint *b, t_varint *v)
+{
+	clock_t	clck[2];
+
+	clck[0] = clock();
+	ft_pow_mod(b + 3, b, b + 1, b + 2);
+	clck[0] = clock() - clck[0];
+		
+	clck[1] = clock();
+	v[3] = v_expmod(v[0], v[1], v[2], true);
+	clck[1] = clock() - clck[1];
+	printf("%snnaumenk : ( %zu , %f)\travard : ( %zu , %f) NNAUMENK_CMP_AWK_FILTER %s\n", KYEL, clck[0], (double)clck[0] / CLOCKS_PER_SEC, clck[1], (double)clck[1] / CLOCKS_PER_SEC, KNRM);
 }
 
 static int	verif_nnaumenk_ravard(t_bigint *b, t_varint *v)
@@ -174,7 +145,8 @@ static int	verif_nnaumenk_ravard(t_bigint *b, t_varint *v)
 	else
 		ret = ft_memcmp(b[3].value, v[3].x, v[3].len) ? -42 : 42;
 	//PRINT
-	nnaumenk_show_n_free(b,v, false, true);
+	bool show = (ret == -42) ? true : false;	
+	nnaumenk_show_n_free(b,v, show, true);
 //	ft_printf("signs = (%d, %d)\n\n", v[0].sign, v[1].sign);
 	return (ret);
 }
@@ -200,15 +172,17 @@ int	nnaumenk_cmp(char **argv)
 //	v_asn1_der_int_seq_e("mul_debug.der", v, 2);
 
 	if (!ft_strcmp("add", argv[2]))
-		NB_TEST_add(b, v);
+		add_cmp(b, v);
 	else if (!ft_strcmp("sub", argv[2]))
-		NB_TEST_sub(b, v);
+		sub_cmp(b, v);
 	else if (!ft_strcmp("mul", argv[2]))
-	  	NB_TEST_mul(b, v);
+	  	mul_cmp(b, v);
 	else if (!ft_strcmp("div", argv[2]))
-	  	NB_TEST_div(b, v);
+	  	div_cmp(b, v);
 	else if (!ft_strcmp("mod", argv[2]))
-	  	NB_TEST_mod(b, v);
+	  	mod_cmp(b, v);
+	else if (!ft_strcmp("expmod", argv[2]))
+	  	expmod_cmp(b, v);
 
 	return (verif_nnaumenk_ravard(b, v));
 }

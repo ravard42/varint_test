@@ -191,11 +191,11 @@ int			u64_cmp(char **argv)
 
 //	show_var(ret, 1, u64, v);
 
-//	if (ret == -42) {
-//		show_var(ret, 1, u64, v);
+	if (ret == -42) {
+		show_var(ret, 1, u64, v);
 //		v_print(&p, "p", -2, KYEL);		
 //		v_print(&q, "q", -2, KYEL);		
-//	}
+	}
 //	ft_dprintf(2, "%sOUT VERIF_OP\n%s", KWHT, KNRM);
 	return (ret);
 }

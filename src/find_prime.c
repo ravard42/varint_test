@@ -72,7 +72,7 @@ static int	miller_witness(t_varint n, t_varint s, t_varint d)
 		r = v_expmod(r, g_v[2], n, false);
 		if (v_cmp(&r, "-eq", &n_min_1, false))
 			return (false);
-		v_inc(&i);
+		v_inc(&i, false);
 	}
 	return (true);
 }
@@ -91,9 +91,9 @@ bool			prob_prim_test(t_varint n)
 	n_min_1 = v_sub(n, g_v[1], false);
 	s = g_v[1];
 	lvalue_required = v_mod(n_min_1, v_exp(g_v[2], s), true, false);
-	while (is_g_v(0, &lvalue_required) && v_inc(&s))
+	while (is_g_v(0, &lvalue_required) && v_inc(&s, false))
 		lvalue_required = v_mod(n_min_1, v_exp(g_v[2], s), true, false);
-	v_dec(&s);
+	v_dec(&s, false);
 	d = v_div(n_min_1, v_exp(g_v[2], s), false);
 	while (nb_a--)
 		if (miller_witness(n, s, d))
