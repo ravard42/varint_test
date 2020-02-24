@@ -16,7 +16,7 @@
 **			V_MAX_LEN >= 8
 **		
 **		NB : oh yeah exp resultat really need 64-bit of data for 4-bit operand
-**			 need 2^20-bit of data for 16-bit operand... (cf v_check.c)
+**			 need 2^20-bit of data for 16-bit operand... (cf V_EXP OVFL NOTE in v_mul_exp.c)
 */
 
 /*
@@ -58,41 +58,34 @@ int			u64_cmp(char **argv)
 	**	CMP TESTS
 	*/
 
-	if (!ft_strncmp("cmp", argv[2], 3))
+	if (!ft_strncmp("cmp", argv[2], 7))
 	{
 		int	ret;
-		if (v[1].len > 8
-			&& ft_dprintf(2, U64_OVFL, KYEL, KNRM))
-			return (-42);	
 		if (!ft_strcmp("_lt", argv[2] + 3))
-		{
-			if (u64_lt(u64[0], u64[1]))
-				ret = v_cmp(v, "-lt", v + 1, true) ? 42 : -42;
-			else 
-				ret = v_cmp(v, "-ge", v + 1, true) ? 42 : -42;
-
-			if (ret == -42)	
-				show_var(ret, 1, u64, v);
-			return ret;
-		}
+			ret = (u64_lt(u64[0], u64[1]) == v_cmp(v, "-lt", v + 1, true)) ? 42 : -42;
 		if (!ft_strcmp("_eq", argv[2] + 3))
-		{
-			if (u64_eq(u64[0], u64[1]))
-				ret = v_cmp(v, "-eq", v + 1, true) ? 42 : -42;
-			else 
-				ret = v_cmp(v, "-ne", v + 1, true) ? 42 : -42;
-
-			if (ret == -42)	
-				show_var(ret, 1, u64, v);
-			return ret;
-		}
+			ret = (u64_eq(u64[0], u64[1]) == v_cmp(v, "-eq", v + 1, true)) ? 42 : -42;
+		if (ret == -42)	
+			show_var(ret, 1, u64, v);
+		return (ret);
 	}
 
 	/*
 	**	OP TESTS
 	*/
 
-	if (!ft_strcmp("add", argv[2])) {
+	//for left and right shift,  option 1 must be ON
+	if (!ft_strcmp("left_shift", argv[2]))
+	{
+		u64[3].x = u64[0].x << 1;
+		v[3] = v_left_shift(v[0], true);
+	}
+	else if (!ft_strcmp("right_shift", argv[2]))
+	{
+		u64[3].x = u64[0].x >> 1;
+		v[3] = v_right_shift(v[0], true);
+	}
+	else if (!ft_strcmp("add", argv[2])) {
 		u64[3] = u64_add(u64[0], u64[1]);
 		v[3] = v_add(v[0], v[1], true);
 	}
@@ -184,13 +177,13 @@ int			u64_cmp(char **argv)
 	else	
 		ret = verify(argv[2], u64, v) ? 42 : -42;
 
-//	show_var(ret, 1, u64, v);
+	show_var(ret, 2, u64, v);
 
-	if (ret == -42) {
-		show_var(ret, 1, u64, v);
+//	if (ret == -42) {
+//		show_var(ret, 1, u64, v);
 //		v_print(&p, "p", -2, KYEL);		
 //		v_print(&q, "q", -2, KYEL);		
-	}
+//	}
 //	ft_dprintf(2, "%sOUT VERIF_OP\n%s", KWHT, KNRM);
 	return (ret);
 }

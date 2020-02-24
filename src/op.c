@@ -14,7 +14,7 @@
 **		cmp_lt, cmp_eq, div, mod, gcd and eea	<---> 	V_MAX_LEN >= len
 **		add, sub								<--->	V_MAX_LEN >= len + 1
 **		mul, expmod, crt			 			<--->	V_MAX_LEN >= 2 * len
-**		exp										<--->	len <= 2 cf v_check.c
+**		exp										<--->	len <= 2 (cf V_EXP OVFL NOTE in v_mul_exp.c)
 */
 
 /*
