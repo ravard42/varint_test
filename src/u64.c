@@ -96,26 +96,18 @@ t_u64			u64_div(t_u64 a, t_u64 b)
 {
 	t_u64		ret;
 
-	if (b.x == 0) {
-		b.sign = 1;
-		b.x = 1;
-	}
 	ret.sign = a.sign * b.sign;
 	ret.x = a.x / b.x;
 	return (ret);
 }
 
-t_u64			u64_mod(t_u64 a, t_u64 b, bool pos)
+t_u64			u64_mod(t_u64 a, t_u64 b, bool eucl)
 {
 	t_u64		ret;
 
-	if (b.x == 0) {
-		b.sign = 1;
-		b.x = 1;
-	}
 	ret.sign = a.sign;
 	ret.x = a.x % b.x;
-	if (pos && ret.sign == -1)
+	if (eucl && ret.sign == -1)
 	{
 		ret.sign = 1;
 		ret.x = b.x - ret.x; 
@@ -142,7 +134,6 @@ t_u64 	u64_expmod(t_u64 a, t_u64 e, t_u64 m, bool pos)
 	}
 	e.sign = 1;
 	m.sign = 1;
-	m.x = m.x == 0 ? 1 : m.x;
 
 	j = 63;
 	while ((e.x >> j & 1) == 0)

@@ -44,10 +44,11 @@ void			show_var(int state, int res, t_u64 *u, t_varint *v)
 
 /*
 **	options on one_byte:
-** 	bit | option
-**     0  | 2nd operand not 0
-**     1  | only_pos
-**     2  | operand sorted (regarding sign)
+** 	bit index | option
+**	----------------------------------------
+**     0 		 | 2nd and 3rd operand != 0
+**     1  		 | only_pos
+**     2 		 | operand sorted (regarding sign)
 **
 ** example: only_pos and sorted --> opt = 6 (00000110)
 */
@@ -65,6 +66,8 @@ bool			rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv, uint8_t opt)
 	// avoid divison by 0
 	if ((opt & 1) && is_g_v(0, v + 1))
 		v[1] = g_v[1];
+	if ((opt & 1) && is_g_v(0, v + 2))
+		v[2] = g_v[1];
 	// ONLY POS NUMBER
 	if (opt & 2) {
 		for (int i = 0; i < 3; i++)
@@ -92,15 +95,10 @@ bool				manual_init_u64_v(t_u64 *u64, t_varint *v)
 {
 	// init manually here
 
-	v[0].sign = 1;
-	v[1].sign = 1;
-	uint64_t buff = 0x50cefe0;
-	ft_memcpy((char *)v[0].x, (char *)&buff, 4);
-	v[0].len = 4;
-	buff = 0xd9376b;
-	ft_memcpy((char *)v[1].x, (char *)&buff, 3);
-	v[1].len = 3;
-
+	uint64_t buff = 0xf304c5;
+	v[0] = v_init(1, (uint8_t *)&buff, 3);
+	buff = 0x010bf4e565;
+	v[1] = v_init(1, (uint8_t *)&buff, 5);
 
 
 	if (u64) {

@@ -29,8 +29,6 @@
 **	 	4			2nd res (for eea)
 */
 
-
-
 int			op(char **argv)
 {
 	t_varint	 	v[5] = { [0 ... 4]  = g_v[0]};
@@ -38,7 +36,7 @@ int			op(char **argv)
 //	ft_dprintf(2, "%sIN : SPEED_OP\n%s", KWHT, KNRM);
 
 
-	if (!rand_init_u64_v(NULL, v, argv, 6)
+	if (!rand_init_u64_v(NULL, v, argv, 3)
 		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
 		return (-42);
 	
@@ -60,14 +58,11 @@ int			op(char **argv)
 //		v[1].x[0] %= 16;
 		v[3] = v_exp(v[0], v[1]);
 	}
-	else if (!ft_strcmp("div", argv[2])) {
-		v[1] = is_g_v(0, v + 1) ? g_v[1] : v[1];
+	//for div|mod|expmod option 0 must be ON
+	else if (!ft_strcmp("div", argv[2]))
 		v[3] = v_div(v[0], v[1], true);
-	}
-	else if (!ft_strcmp("mod", argv[2])) {
-		v[1] = is_g_v(0, v + 1) ? g_v[1] : v[1];
+	else if (!ft_strcmp("mod", argv[2]))
 		v[3] = v_mod(v[0], v[1], true, true);
-	}
 	else if (!ft_strcmp("expmod", argv[2]))
 	{
 
@@ -81,7 +76,6 @@ int			op(char **argv)
 
 		//RANDOM_INIT
 		v[1].sign = 1;
-		v[2] = is_g_v(0, v + 2) ? g_v[1] : v[2];
 		v[3] = v_expmod(v[0], v[1], v[2], true);
 //		show_var(42, 1, NULL, v);
 	}
@@ -102,20 +96,19 @@ int			op(char **argv)
 //		v[1].sign = 1;
 //		v[3] = v_crt(v[0], v[1], *p, *q);
 	}
+	// for gcd and eea option 1 must be ON
 	else if (!ft_strcmp("gcd", argv[2]))
 		v[3] = v_gcd(v[0], v[1]);
 	else if (!ft_strcmp("eea", argv[2]))
-	{
-		v[0].sign = v[1].sign = 1;
 		v_eea(v + 3, v[0], v[1]);
-	}
 	else
 	{
 		ft_dprintf(2, "%s'%s' : unknown operator%s\n", KRED, argv[2], KNRM);
 		return (-42);
 	}
 	int ret = (is_g_v(3, v + 3) || is_g_v(3, v + 4)) ? -42 : 42;
-	show_var(ret, 1, NULL, v);
+	
+	show_var(ret, 2, NULL, v);
 
 //	ft_dprintf(2, "%sOUT SPEED_OP\n%s", KWHT, KNRM);
 	return (ret);
