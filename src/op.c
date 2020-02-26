@@ -24,7 +24,8 @@
 **				
 **		0			1st operand
 **		1			2nd operand
-**	 	2			3rd operand (for modulus only)
+**	 	2			3rd operand: modulus (v_expmod) 
+**									|| gcd (v_gcd_eea)
 **	 	3			1st res
 **	 	4			2nd res (for eea)
 */
@@ -100,11 +101,11 @@ int			op(char **argv)
 //		v[1].sign = 1;
 //		v[3] = v_crt(v[0], v[1], *p, *q);
 	}
-	// for gcd and eea option 1 must be ON
-	else if (!ft_strcmp("gcd", argv[2]))
-		v[3] = v_gcd(v[0], v[1], true);
-	else if (!ft_strcmp("eea", argv[2]))
+	else if (!ft_strcmp("gcd_eea", argv[2]))
+	{
+		v[2] = v_gcd(v[0], v[1], true);
 		v_eea(v + 3, v[0], v[1], true);
+	}
 	else
 	{
 		ft_dprintf(2, "%s'%s' : unknown operator%s\n", KRED, argv[2], KNRM);

@@ -40,7 +40,7 @@ void			show_var(int state, int res, t_u64 *u, t_varint *v)
 		if (res == 2)
 			v_print("v[4]", v + 4);
 	}
-	ft_printf("\n%s<--------------SHOW_VAR OUT-------------->%s\n", KYEL, KNRM);
+	ft_printf("\n%s<--------------SHOW_VAR OUT-------------->%s\n\n", KYEL, KNRM);
 }
 
 /*
@@ -138,19 +138,28 @@ t_varint			*asn1_der_init(t_varint *dest, char *der_file)
 */
 bool			verify(char *op, t_u64 *u64, t_varint *v)
 {
-	uint64_t		verif[2] = {0};
+	uint64_t		verif = 0;
 	bool			ret;
 
 	for (int i = 0; i < (v + 3)->len; i++)
-		verif[0] += (uint64_t)(v + 3)->x[i] << (8 * i);
+		verif += (uint64_t)(v + 3)->x[i] << (8 * i);
 	ret = ((u64 + 3)->sign == (v + 3)->sign
-			&& (u64 + 3)->x == verif[0]) ? true : false;
-	if (!ft_strcmp(op, "eea") && ret == true)
+			&& (u64 + 3)->x == verif) ? true : false;
+	if (!ft_strcmp(op, "gcd_eea") && ret == true)
 	{
+		verif = 0;
+		for (int i = 0; i < (v + 2)->len; i++)
+			verif += (uint64_t)(v + 2)->x[i] << (8 * i);
+		if (verif != (u64 + 2)->x
+			&& ft_dprintf(2, "%sGCDs doesn't match%s\n", KRED, KNRM))
+			return (false);
+		verif = 0;
 		for (int i = 0; i < (v + 4)->len; i++)
-			verif[1] += (uint64_t)(v + 4)->x[i] << (8 * i);
+			verif += (uint64_t)(v + 4)->x[i] << (8 * i);
 		ret = ((u64 + 4)->sign == (v + 4)->sign
-			&& (u64 + 4)->x == verif[1]) ? true : false;
+			&& (u64 + 4)->x == verif) ? true : false;
+		if (ret)
+			ft_printf("%sGCD_EEA OK : u64[3] * u64[0] + u64[4] * u64[1] = %lu (u64[2] <-> GCD)\n%s", KGRN, u64[3].sign * u64[3].x * u64[0].sign * u64[0].x + u64[4].sign * u64[4].x * u64[1].sign * u64[1].x, KNRM);
 	}
 	return (ret);
 }

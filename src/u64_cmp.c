@@ -26,7 +26,8 @@
 **				
 **		0			1st operand
 **		1			2nd operand
-**	 	2			3rd operand (for modulus only)
+**	 	2			3rd operand: modulus (v_expmod) 
+**									|| gcd (v_gcd_eea)
 **	 	3			1st res
 **	 	4			2nd res (for eea)
 */
@@ -131,12 +132,7 @@ int			u64_cmp(char **argv)
 		v[1].sign = 1;
 		v[3] = v_expmod(v[0], v[1], v[2], true);
 	}
-	else if (!ft_strcmp("gcd", argv[2]))
-	{
-		u64[3].x = gcd(u64[0].x, u64[1].x);
-		v[3] = v_gcd(v[0], v[1], true);
-	}
-	else if (!ft_strcmp("eea", argv[2]))
+	else if (!ft_strcmp("gcd_eea", argv[2]))
 	{
 		u64[2].sign = 1;
 		u64[2].x = gcd(u64[0].x, u64[1].x);
