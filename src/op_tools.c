@@ -20,8 +20,15 @@ void			show_var(int state, int res, t_u64 *u, t_varint *v)
 	else if (state == -42)
 		ft_printf("\n%sFAILED%s\n", KRED, KNRM);
 	if (u)
+	{
 		for (int i = 0; i < 3; i++)
 			u64_print(u[i], i, KMAG);	
+		if (res >= 1) {
+			u64_print(u[3], 3, KCYN);	
+			if (res == 2)
+				u64_print(u[4], 4, KCYN);
+		}
+	}
 	for (int i = 0; i < 3; i++)
 	{
 		name[2] = '0' + i;
@@ -29,12 +36,6 @@ void			show_var(int state, int res, t_u64 *u, t_varint *v)
 	}
 	if (res >= 1)
 	{
-		if (u)
-		{
-			u64_print(u[3], 3, KCYN);	
-			if (res == 2)
-				u64_print(u[4], 4, KCYN);
-		}
 		v_print("v[3]", v + 3);
 		if (res == 2)
 			v_print("v[4]", v + 4);
@@ -75,7 +76,7 @@ bool			rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv, uint8_t opt)
 	}
 	// SORT IT
 	if (opt & 4)
-		v_sort(v, v + 1, NULL, false);
+		v_sort(v, v + 1, NULL);
 // INIT U64
 	if (u64) {
 		for (int i = 0; i < 3; i++) {
@@ -144,7 +145,7 @@ bool			verify(char *op, t_u64 *u64, t_varint *v)
 		verif[0] += (uint64_t)(v + 3)->x[i] << (8 * i);
 	ret = ((u64 + 3)->sign == (v + 3)->sign
 			&& (u64 + 3)->x == verif[0]) ? true : false;
-	if (!ft_strcmp(op, "eea"))
+	if (!ft_strcmp(op, "eea") && ret == true)
 	{
 		for (int i = 0; i < (v + 4)->len; i++)
 			verif[1] += (uint64_t)(v + 4)->x[i] << (8 * i);

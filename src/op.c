@@ -35,8 +35,12 @@ int			op(char **argv)
 
 //	ft_dprintf(2, "%sIN : SPEED_OP\n%s", KWHT, KNRM);
 
-
-	if (!rand_init_u64_v(NULL, v, argv, 3)
+	/*rand_init opt (last param): 
+	**     0 		 | 2nd and 3rd operand != 0
+	**     1  		 | only_pos
+	**     2 		 | operand sorted (regarding sign)
+	*/
+	if (!rand_init_u64_v(NULL, v, argv, 0)
 		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
 		return (-42);
 	
@@ -98,9 +102,9 @@ int			op(char **argv)
 	}
 	// for gcd and eea option 1 must be ON
 	else if (!ft_strcmp("gcd", argv[2]))
-		v[3] = v_gcd(v[0], v[1]);
+		v[3] = v_gcd(v[0], v[1], true);
 	else if (!ft_strcmp("eea", argv[2]))
-		v_eea(v + 3, v[0], v[1]);
+		v_eea(v + 3, v[0], v[1], true);
 	else
 	{
 		ft_dprintf(2, "%s'%s' : unknown operator%s\n", KRED, argv[2], KNRM);

@@ -40,7 +40,13 @@ int			u64_cmp(char **argv)
 
 	
 //	ft_dprintf(2, "\n%sIN : VERIF_OP\n%s", KWHT, KNRM);
-	if (!rand_init_u64_v(u64, v, argv, 3)
+
+	/*rand_init opt (last param): 
+	**     0 		 | 2nd and 3rd operand != 0
+	**     1  		 | only_pos
+	**     2 		 | operand sorted (regarding sign)
+	*/
+	if (!rand_init_u64_v(u64, v, argv, 0)
 		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
 		return (-42);	
 //	manual_init_u64_v(u64, v);
@@ -58,7 +64,7 @@ int			u64_cmp(char **argv)
 	**	CMP TESTS
 	*/
 
-	if (!ft_strncmp("cmp", argv[2], 7))
+	if (!ft_strncmp("cmp", argv[2], 3))
 	{
 		int	ret;
 		if (!ft_strcmp("_lt", argv[2] + 3))
@@ -125,16 +131,18 @@ int			u64_cmp(char **argv)
 		v[1].sign = 1;
 		v[3] = v_expmod(v[0], v[1], v[2], true);
 	}
-	// for gcd and eea option 1 must be ON
 	else if (!ft_strcmp("gcd", argv[2]))
 	{
 		u64[3].x = gcd(u64[0].x, u64[1].x);
-		v[3] = v_gcd(v[0], v[1]);
+		v[3] = v_gcd(v[0], v[1], true);
 	}
 	else if (!ft_strcmp("eea", argv[2]))
 	{
+		u64[2].sign = 1;
+		u64[2].x = gcd(u64[0].x, u64[1].x);
+		v[2] = v_gcd(v[0], v[1], true);
 		u64_eea(u64 + 3, u64[0], u64[1]);
-		v_eea(v + 3, v[0], v[1]);
+		v_eea(v + 3, v[0], v[1], true);
 	}
 	else if (!ft_strcmp("crt", argv[2]))
 	{
@@ -180,9 +188,9 @@ int			u64_cmp(char **argv)
 	show_var(ret, 2, u64, v);
 
 //	if (ret == -42) {
-//		show_var(ret, 1, u64, v);
-//		v_print(&p, "p", -2, KYEL);		
-//		v_print(&q, "q", -2, KYEL);		
+//		show_var(ret, 2, u64, v);
+	//	v_print(&p, "p", -2, KYEL);		
+	//	v_print(&q, "q", -2, KYEL);		
 //	}
 //	ft_dprintf(2, "%sOUT VERIF_OP\n%s", KWHT, KNRM);
 	return (ret);

@@ -4,10 +4,9 @@
 void					u64_print(t_u64 u, int numb, char *col)
 {
 	if (u.sign == 1)
-		ft_dprintf(2, "%su64[%d] = %lx%s\n", col, numb, u.x, KNRM);
+		ft_dprintf(2, "%su64[%d] = %lx (%lu)%s\n", col, numb, u.x, u.x, KNRM);
 	else
-		ft_dprintf(2, "%su64[%d] = -%lx%s\n", col, numb, u.x, KNRM);
-		
+		ft_dprintf(2, "%su64[%d] = -%lx (-%lu)%s\n", col, numb, u.x, u.x, KNRM);
 }
 
 bool					u64_lt(t_u64 a, t_u64 b)
@@ -165,29 +164,44 @@ uint64_t		gcd(uint64_t a, uint64_t b)
 	return (r[0]);
 }
 
-void    u64_sort(t_u64 *a, t_u64 *b) 
+// cf v_sort in varint/v_tools.c
+uint8_t    u64_sort(t_u64 *a, t_u64 *b, int8_t *sign) 
 {
    t_u64 tmp;
+	int8_t		tmp_sign;
 
+	if (sign)
+	{
+		sign[0] = a->sign;
+		sign[1] = b->sign;
+		a->sign = 1;
+		b->sign = 1;
+	}	
    if (u64_lt(*a, *b))
-   {   
-      tmp = *a; 
-      *a = *b; 
-      *b = tmp;
-   }   
+	{
+		tmp = *a;
+		*a = *b;
+		*b = tmp;
+		if (sign)
+		{
+			tmp_sign = sign[0];
+			sign[0] = sign[1];
+			sign[1] = tmp_sign;
+		}
+		return (1);
+	}
+	return (0);
 }
-
 
 void		u64_eea(t_u64 *coef_r0, t_u64 a, t_u64 b)
 {
-	t_u64	r[2]; // deux derniers restes
-	t_u64	coef_r1[2]; // coef alpha et beta de r[1]
-	t_u64	tmp[2];	
+	int8_t	sign[3];
+	t_u64		r[2]; // deux derniers restes
+	t_u64		coef_r1[2]; // coef alpha et beta de r[1]
+	t_u64		tmp[2];	
 								
 
-	a.sign = 1;
-	b.sign = 1;
-	u64_sort(&a, &b);
+	sign[2] = u64_sort(&a, &b, sign);
 	r[0] = a;
 	coef_r0[0] = g_u64_1;
 	coef_r0[1] = g_u64_0;
@@ -210,4 +224,12 @@ void		u64_eea(t_u64 *coef_r0, t_u64 a, t_u64 b)
 		coef_r1[0] = tmp[0];
 		coef_r1[1] = tmp[1];
 	}
+	coef_r0[0].sign *= (sign[0] != a.sign) ? -1 : 1;
+	(coef_r0[1]).sign *= (sign[1] != a.sign) ? -1 : 1;
+	if (sign[2])
+	{
+		tmp[0] = coef_r0[0];
+		coef_r0[0] = coef_r0[1];
+		coef_r0[1] = tmp[0];
+	}	
 }
