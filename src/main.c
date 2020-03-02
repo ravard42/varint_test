@@ -52,11 +52,8 @@ int	main(int argc, char **argv)
 //		return (nnaumenk_cmp(argv));
 	else if (!ft_strcmp("find_prime", argv[1]) && argc == 3)
 		find_prime(atoi(argv[2]), true);
-	else if (!ft_strcmp("asn1_der", argv[1])) {
-		if (!ft_strcmp("basic", argv[2]) && argc == 4)
-			return(basic_asn1_der_test(argv[3]));
-		else if (!ft_strcmp("rsa", argv[2]) && argc == 5)
+	else if (!ft_strcmp("asn1_der", argv[1]) && argc > 2)
+		if (!ft_strcmp("rsa", argv[2]) && argc == 5)
 			return (rsa_asn1_der_test(argv[3], argv[4]));
-	}
 	return (0);
 }

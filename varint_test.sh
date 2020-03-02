@@ -72,17 +72,7 @@ while ((++i < $3));do
 done
 fi
 
-#-----ASN1_DER TEST-----
-
-#BASIC
-
-if [[ $1 == asn1_der && $2 == basic ]];then
-./varint_test asn1_der basic out.der
-hexdump -ve '1/1 "%.2x"' out.der
-rm out.der
-fi
-
-#RSA PRIVATE KEY
+#-----ASN1_DER TEST ON RSA PRIVATE KEY-----
 
 if [[ $1 == asn1_der && $2 == rsa ]] && (($# == 4));then
 # $3 : size of modulus in bits
