@@ -17,7 +17,7 @@ KWHT="\x1B[37;1m"
 if [[ $1 == "op" || $1 == "u64_cmp" || $1 == "nnaumenk_cmp" ]] && (($# == 4));then
 # $2 : op to process
 # $3 : numb of uint8_t 
-# $4 : numb of test
+# $4 : numb of tests
 
 
 if [[ $1 == "op" ]];then
