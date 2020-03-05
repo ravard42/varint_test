@@ -2,8 +2,8 @@ CC = gcc
 #CC = clang
 NAME = varint_test
 
-#FLAGS = -Wall -Wextra -O2
-FLAGS = -Wall -Wextra -fsanitize=address -g
+FLAGS = -Wall -Wextra -O2
+#FLAGS = -Wall -Wextra -fsanitize=address -g
 
 SRC = src/main.c\
 		src/op_tools.c\
@@ -19,7 +19,7 @@ OBJ = $(SRC:.c=.o)
 
 LIBFT_DIR = ../
 
-INCL = -I ${LIBFT_DIR}/include -I ${LIBFT_DIR}/include/nnaumenk -I include
+INCL = -I ${LIBFT_DIR}/include -I include
 LIB =  -lm -L ${LIBFT_DIR} -lft
 
 all : $(NAME)
