@@ -125,7 +125,7 @@ t_varint			*asn1_der_init(t_varint *dest, char *der_file)
 		&& ft_dprintf(2, "%serror reading p.der%s\n", KRED, KNRM))
 		return NULL;
 
-	ptr = v_asn1_der_int_seq_d(&nb_v, &r);
+	ptr = v_asn1_int_seq_der_d(&nb_v, &r);
 	//v_print("ret", ret);
 	ft_memcpy(dest, ptr, sizeof(t_varint) * nb_v);
 	free(r.msg);

@@ -4,7 +4,7 @@
 **	Here we run varint operators on randomely choose varint variables,
 **	then we can test the rapidity of our operators (time sh varint_test.sh op [...])
 **	or test overflow errors, checking the return value of our operator.
-**	We can test operators on manual input settings too with manual_init_u64_v func or load asn1 der integer sequence previously encoded. (v_asn1_der_int_seq_e|d)
+**	We can test operators on manual input settings too with manual_init_u64_v func or load asn1 der integer sequence previously encoded. (v_asn1_int_seq_der_e|d)
 **
 **	len = atoi(argv[3]) has no limitation here 
 **	(juste the adjustement of V_MAX_LEN in varint.h to avoid overflows)

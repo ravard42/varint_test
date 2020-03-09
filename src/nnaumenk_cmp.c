@@ -169,7 +169,7 @@ int	nnaumenk_cmp(char **argv)
 	if (!init_nnaumenk(b, v))
 		return (-42);
 
-//	v_asn1_der_int_seq_e("mul_debug.der", v, 2);
+//	v_asn1_int_seq_der_e("mul_debug.der", v, 2);
 
 	if (!ft_strcmp("add", argv[2]))
 		add_cmp(b, v);
