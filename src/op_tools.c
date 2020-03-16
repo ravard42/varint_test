@@ -32,13 +32,13 @@ void			show_var(int state, int res, t_u64 *u, t_varint *v)
 	for (int i = 0; i < 3; i++)
 	{
 		name[2] = '0' + i;
-		v_print(name, v + i);
+		v_print(1, name, v + i);
 	}
 	if (res >= 1)
 	{
-		v_print("v[3]", v + 3);
+		v_print(1, "v[3]", v + 3);
 		if (res == 2)
-			v_print("v[4]", v + 4);
+			v_print(1, "v[4]", v + 4);
 	}
 	ft_printf("\n%s<--------------SHOW_VAR OUT-------------->%s\n\n", KYEL, KNRM);
 }
@@ -126,7 +126,7 @@ t_varint			*asn1_der_init(t_varint *dest, char *der_file)
 		return NULL;
 
 	ptr = v_asn1_int_seq_der_d(&nb_v, &r);
-	//v_print("ret", ret);
+	//v_print(1, "ret", ret);
 	ft_memcpy(dest, ptr, sizeof(t_varint) * nb_v);
 	free(r.msg);
 	free(ptr);
