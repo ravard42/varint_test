@@ -23,7 +23,7 @@ bool			nnaumenk_show_n_free(t_bigint *b, t_varint *v, bool show, bool freee)
 	{
 		ft_printf("\n%sRAVARD%s\n", KYEL, KNRM);
 		show_var(0, 2, NULL, v);
-		ft_putchar('\n');
+		ft_putchar(1, '\n');
 	}
 	return (true);
 }
