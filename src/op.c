@@ -44,6 +44,18 @@ int			op(char **argv)
 	if (!rand_init_u64_v(NULL, v, argv, 0)
 		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
 		return (-42);
+
+//	v[0] = g_v[0];
+//	v[0].len = 8;
+//	v[0].x[0] = 5;
+//	v[0].x[1] = 5;
+//	v[0].x[2] = 5;
+//	v[0].x[3] = 5;
+//	v[0].x[4] = 5;
+//	v[0].x[5] = 5;
+//	v[0].x[6] = 5;
+//	v[0].x[7] = 5;
+
 	
 //	manual_init_u64_v(NULL, v);
 
@@ -113,7 +125,7 @@ int			op(char **argv)
 	}
 	int ret = (is_g_v(3, v + 3) || is_g_v(3, v + 4)) ? -42 : 42;
 	
-	//show_var(ret, 2, NULL, v);
+//	show_var(ret, 2, NULL, v);
 
 //	ft_dprintf(2, "%sOUT SPEED_OP\n%s", KWHT, KNRM);
 	return (ret);

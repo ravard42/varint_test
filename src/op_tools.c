@@ -57,9 +57,10 @@ void			show_var(int state, int res, t_u64 *u, t_varint *v)
 bool			rand_init_u64_v(t_u64 *u64, t_varint *v, char **argv, uint8_t opt)
 {
 // VARINT RANDOM INITIALISATION
+	uint16_t	tmp;
 	for (int i = 0; i < 3; i++)
 	{
-		v[i] = v_rand(atoi(argv[3]), true);
+		v[i] = v_rand(ft_range(*((uint16_t *)ft_rand(&tmp, 2)), 1, atoi(argv[3]) + 1), true);
 		if (is_g_v(3, v + i))
 			return (false);
 	}
