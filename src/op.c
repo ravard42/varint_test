@@ -45,6 +45,7 @@ int			op(char **argv)
 		&& ft_dprintf(2, "%sOUT : RAND_INIT ERROR%s\n", KWHT, KNRM))
 		return (-42);
 
+	ft_dprintf(2, "(v[0].len, v[1].len) = (%d, %d)\n", v[0].len, v[1].len);
 //	v[0] = g_v[0];
 //	v[0].len = 8;
 //	v[0].x[0] = 5;
@@ -116,7 +117,8 @@ int			op(char **argv)
 	else if (!ft_strcmp("gcd_eea", argv[2]))
 	{
 		v[2] = v_gcd(v[0], v[1], true);
-		v_eea(v + 3, v[0], v[1], true);
+		if (!v_eea(v + 3, v[0], v[1], true))
+			v[3] = g_v[3];
 	}
 	else
 	{
