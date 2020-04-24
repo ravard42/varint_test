@@ -97,23 +97,23 @@ int			op(char **argv)
 		v[3] = v_expmod(v[0], v[1], v[2], true);
 //		show_var(42, 1, NULL, v);
 	}
-	else if (!ft_strcmp("crt", argv[2]))
-	{
-		
-		//ASN1_DER_INIT
-		t_varint		p, q;
-		asn1_der_init(v, "der_files/v0_v1_v2.der"); // v[2] = p * q
-		asn1_der_init(&p, "der_files/p.der");
-		asn1_der_init(&q, "der_files/q.der");
-		v[3] = v_crt(v[0], v[1], p, q);
-		show_var(0, 2, NULL, v);
-		
-		//RANDOM_INIT
-//		p = find_prime(atoi(argv[3]) / 2, false);
-//		q = find_prime(atoi(argv[3]) / 2, false);
-//		v[1].sign = 1;
-//		v[3] = v_crt(v[0], v[1], *p, *q);
-	}
+//	else if (!ft_strcmp("crt", argv[2]))
+//	{
+//		
+//		//ASN1_DER_INIT
+//		t_varint		p, q;
+//		asn1_der_init(v, "der_files/v0_v1_v2.der"); // v[2] = p * q
+//		asn1_der_init(&p, "der_files/p.der");
+//		asn1_der_init(&q, "der_files/q.der");
+//		v[3] = v_crt(v[0], v[1], p, q);
+//		show_var(0, 2, NULL, v);
+//		
+//		//RANDOM_INIT
+////		p = find_prime(atoi(argv[3]) / 2, false);
+////		q = find_prime(atoi(argv[3]) / 2, false);
+////		v[1].sign = 1;
+////		v[3] = v_crt(v[0], v[1], *p, *q);
+//	}
 	else if (!ft_strcmp("gcd_eea", argv[2]))
 	{
 		v[2] = v_gcd(v[0], v[1], true);

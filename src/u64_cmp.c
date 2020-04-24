@@ -37,7 +37,7 @@ int			u64_cmp(char **argv)
 
 	t_u64			u64[5] = {[0 ... 4] = g_u64_0};
 	t_varint	 	v[5] = {[0 ... 4 ] = g_v[0]};
-	t_varint		p, q;
+	//t_varint		p, q;
 
 	
 //	ft_dprintf(2, "\n%sIN : VERIF_OP\n%s", KWHT, KNRM);
@@ -140,28 +140,28 @@ int			u64_cmp(char **argv)
 		u64_eea(u64 + 3, u64[0], u64[1]);
 		v_eea(v + 3, v[0], v[1], true);
 	}
-	else if (!ft_strcmp("crt", argv[2]))
-	{
-		p = find_prime(2, false);
-//		p = g_v[2];
-//		p.x[0] = 61;
-		q = find_prime(2, false);
-		while (v_cmp(&p, "-eq", &q, true))
-			q = find_prime(1, false);
-//		q = g_v[2];
-//		q.x[0] = 47;
-
-		u64[1].sign = 2;
-		u64[2].sign = 2;
-		u64[2].x = (((uint64_t)p.x[1] << 8) + (uint64_t)p.x[0])
-			* (((uint64_t)q.x[1] << 8) + (uint64_t)q.x[0]);
-		u64[3] = u64_expmod(u64[0], u64[1], u64[2], true);
-
-	
-		v[1].sign = 1;
-		v[2] = v_mul(p, q, true);
-		v[3] = v_crt(v[0], v[1], p, q);	
-	}
+//	else if (!ft_strcmp("crt", argv[2]))
+//	{
+//		p = find_prime(2, false);
+////		p = g_v[2];
+////		p.x[0] = 61;
+//		q = find_prime(2, false);
+//		while (v_cmp(&p, "-eq", &q, true))
+//			q = find_prime(1, false);
+////		q = g_v[2];
+////		q.x[0] = 47;
+//
+//		u64[1].sign = 2;
+//		u64[2].sign = 2;
+//		u64[2].x = (((uint64_t)p.x[1] << 8) + (uint64_t)p.x[0])
+//			* (((uint64_t)q.x[1] << 8) + (uint64_t)q.x[0]);
+//		u64[3] = u64_expmod(u64[0], u64[1], u64[2], true);
+//
+//	
+//		v[1].sign = 1;
+//		v[2] = v_mul(p, q, true);
+//		v[3] = v_crt(v[0], v[1], p, q);	
+//	}
 	else
 	{
 		ft_dprintf(2, "%s'%s' : unknown operator%s\n", KRED, argv[2], KNRM);

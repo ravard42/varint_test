@@ -32,13 +32,13 @@ void			show_var(int state, int res, t_u64 *u, t_varint *v)
 	for (int i = 0; i < 3; i++)
 	{
 		name[2] = '0' + i;
-		v_print(1, name, v + i);
+		v_print(1, name, v + i, false);
 	}
 	if (res >= 1)
 	{
-		v_print(1, "v[3]", v + 3);
+		v_print(1, "v[3]", v + 3, false);
 		if (res == 2)
-			v_print(1, "v[4]", v + 4);
+			v_print(1, "v[4]", v + 4, false);
 	}
 	ft_printf("\n%s<--------------SHOW_VAR OUT-------------->%s\n\n", KYEL, KNRM);
 }

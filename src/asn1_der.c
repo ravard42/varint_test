@@ -17,7 +17,7 @@ int		rsa_asn1_der_test(char *in_der, char *out_der)
 	if ((v = v_asn1_int_seq_der_d(&nb_v, &r)))
 	{
 		free(r.msg);
-		if (v_asn1_int_seq_der_e(&r, v, nb_v) == -1)
+		if (!v_asn1_int_seq_der_e(&r, v, nb_v))
 			return (-1);
 		fd_out = open(out_der, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd_out == -1 && ft_dprintf(2, "error opening file\n"))
